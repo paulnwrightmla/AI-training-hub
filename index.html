@@ -1,0 +1,1120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Literacy Hub</title>
+<meta name="description" content="Six short films and hands-on exercises on understanding and using generative AI well, for university staff and students.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a course "reading room" — hub page (hero + module path + toolkit), and a module page (film, then tabbed transcript / exercise / reflection). Highlighter yellow is the one bold mark. */
+:root {
+  --paper: #f4f7fa;
+  --surface: #ffffff;
+  --sunken: #e9eef4;
+  --ink: #15212f;
+  --muted: #55657a;
+  --line: #d6dee8;
+  --brand: #1c3d6b;
+  --brand-soft: #e2eaf6;
+  --on-brand: #ffffff;
+  --mark: #ffe25e;
+  --mark-ink: #15212f;
+  --green: #23824f;  --green-soft: #dcf1e4;
+  --amber: #a86d00;  --amber-soft: #fbedcc;
+  --red:   #b93a25;  --red-soft:   #f8dfd9;
+  --film: #0f1a28;
+  --shadow: 0 1px 2px rgba(21,33,47,.06), 0 8px 24px -12px rgba(21,33,47,.18);
+
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --step--1: .86rem; --step-0: 1rem; --step-1: 1.2rem; --step-2: 1.5rem; --step-3: 2rem; --step-4: clamp(2.2rem, 5.2vw, 3.6rem);
+  --radius: 10px;
+  --wrap: 1120px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #0d141e; --surface: #151f2c; --sunken: #1b2735; --ink: #e5ecf4; --muted: #9babbe; --line: #2a3747;
+  --brand: #9dbcf0; --brand-soft: #1f3150; --on-brand: #0d141e; --mark: #e8c63a; --mark-ink: #15212f;
+  --green: #62c98f; --green-soft: #173a29; --amber: #e6ad45; --amber-soft: #3d2f12; --red: #f08a74; --red-soft: #45221c;
+  --film: #070c13; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --paper: #0d141e; --surface: #151f2c; --sunken: #1b2735; --ink: #e5ecf4; --muted: #9babbe; --line: #2a3747;
+  --brand: #9dbcf0; --brand-soft: #1f3150; --on-brand: #0d141e; --mark: #e8c63a; --mark-ink: #15212f;
+  --green: #62c98f; --green-soft: #173a29; --amber: #e6ad45; --amber-soft: #3d2f12; --red: #f08a74; --red-soft: #45221c;
+  --film: #070c13; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6); color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 var(--step-0)/1.6 var(--f-body); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4 { font-family: var(--f-display); line-height: 1.12; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+p { margin: 0; }
+a { color: var(--brand); }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding-inline: 20px; }
+.eyebrow { font: 600 .74rem/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.hl { background: linear-gradient(104deg, transparent .3em, var(--mark) .3em, var(--mark) calc(100% - .2em), transparent calc(100% - .2em)) 0 85% / 100% 48% no-repeat; color: inherit; padding-inline: .1em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.muted { color: var(--muted); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: .5em; border: 1px solid var(--line); background: var(--surface); padding: .55em 1em; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: .92rem; text-decoration: none; color: var(--ink); transition: background .15s, border-color .15s, transform .15s; }
+.btn:hover { border-color: var(--brand); }
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--brand); color: var(--on-brand); border-color: var(--brand); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; }
+.btn.small { padding: .35em .8em; font-size: .82rem; }
+.btn svg { width: 1em; height: 1em; }
+
+/* Top bar */
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--line); }
+.topbar .wrap { display: flex; align-items: center; gap: 16px 24px; padding-block: 12px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font: 800 1.08rem/1 var(--f-display); margin-right: auto; }
+.brand-mark { width: 30px; height: 30px; border-radius: 8px; background: var(--brand); display: grid; place-items: center; color: var(--on-brand); font: 600 .8rem/1 var(--f-mono); }
+.brand small { display: block; font: 400 .72rem/1.2 var(--f-body); color: var(--muted); margin-top: 3px; letter-spacing: 0; }
+.seg { display: inline-flex; background: var(--sunken); border-radius: 999px; padding: 3px; border: 1px solid var(--line); }
+.seg button { border: 0; background: transparent; padding: .38em .95em; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: .86rem; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+.pips { display: flex; align-items: center; gap: 8px; font: 600 .78rem/1 var(--f-mono); color: var(--muted); }
+.pips span.p { width: 14px; height: 6px; border-radius: 3px; background: var(--line); }
+.pips span.p.on { background: var(--green); }
+.pips span.p.half { background: linear-gradient(90deg, var(--amber) 50%, var(--line) 50%); }
+
+/* Hero */
+.hero { padding-block: clamp(36px, 6vw, 72px) 40px; }
+.hero .wrap { display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: center; }
+.hero h1 { font-size: var(--step-4); font-weight: 800; margin-block: 14px 18px; }
+.hero .lede { font-size: var(--step-1); color: var(--muted); max-width: 34em; }
+.hero .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+.hero .facts { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 28px; font-size: .9rem; color: var(--muted); }
+.hero .facts b { display: block; font: 700 1.35rem/1.1 var(--f-display); color: var(--ink); }
+
+.predict { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 22px; min-width: 0; }
+.predict .bar-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 14px; }
+.predict .phrase { font: 600 clamp(1.25rem, 2.6vw, 1.6rem)/1.35 var(--f-mono); min-height: 2.7em; word-break: break-word; }
+.predict .phrase .caret { display: inline-block; width: .55em; height: 1.05em; background: var(--brand); vertical-align: -.15em; margin-left: 2px; animation: blink 1s steps(1) infinite; }
+.predict .phrase .new { background: var(--mark); color: var(--mark-ink); border-radius: 3px; padding-inline: 2px; }
+@keyframes blink { 50% { opacity: 0; } }
+.cands { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 7px; }
+.cands li { display: grid; grid-template-columns: 6.5em 1fr 3em; align-items: center; gap: 10px; font: 400 .9rem/1 var(--f-mono); }
+.cands .track { height: 10px; background: var(--sunken); border-radius: 5px; overflow: hidden; }
+.cands .fill { height: 100%; background: var(--brand); border-radius: 5px; transition: width .45s cubic-bezier(.3,.7,.2,1); }
+.cands li:first-child .fill { background: var(--mark); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mark-ink) 25%, transparent); }
+.cands .pct { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+.predict .note { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); font-size: .9rem; color: var(--muted); }
+.predict .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+
+/* Section headings */
+.section { padding-block: 44px; }
+.section-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+.section-head h2 { font-size: var(--step-3); font-weight: 800; margin-top: 8px; }
+.section-head p { color: var(--muted); max-width: 40em; }
+
+/* Module path */
+.path { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; counter-reset: mod; }
+.mcard { position: relative; display: flex; flex-direction: column; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px 22px 18px; text-decoration: none; color: var(--ink); transition: transform .18s, box-shadow .18s, border-color .18s; min-width: 0; }
+.mcard:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--brand) 45%, var(--line)); }
+.mcard .num { display: flex; justify-content: space-between; align-items: center; }
+.mcard .num b { font: 800 2.6rem/1 var(--f-display); color: var(--brand); letter-spacing: -.03em; }
+.mcard h3 { font-size: var(--step-1); font-weight: 700; }
+.mcard .hook { color: var(--muted); font-size: .94rem; flex: 1; }
+.mcard .foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-top: 12px; border-top: 1px solid var(--line); font-size: .82rem; color: var(--muted); }
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 600 .7rem/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; padding: 5px 8px; border-radius: 999px; background: var(--sunken); color: var(--muted); white-space: nowrap; }
+.chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .7; }
+.chip.done { background: var(--green-soft); color: var(--green); }
+.chip.prog { background: var(--amber-soft); color: var(--amber); }
+
+/* Toolkit */
+.kit { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 18px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; min-width: 0; }
+.panel h3 { font-size: var(--step-1); margin-bottom: 4px; }
+.panel > .muted { font-size: .9rem; margin-bottom: 16px; }
+.k-trace { grid-column: span 7; }
+.k-dial { grid-column: span 5; }
+.k-audit { grid-column: span 5; }
+.k-gloss { grid-column: span 7; }
+.trace { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.trace li { display: grid; grid-template-columns: 2.4rem 7.5rem 1fr; gap: 12px; align-items: baseline; padding: 9px 0; border-bottom: 1px dashed var(--line); }
+.trace li:last-child { border-bottom: 0; }
+.trace .L { font: 800 1.6rem/1 var(--f-display); color: var(--brand); }
+.trace .w { font-weight: 700; }
+.trace .d { color: var(--muted); font-size: .94rem; }
+.dial input[type=range] { width: 100%; accent-color: var(--brand); margin-block: 6px 4px; }
+.dial .ticks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; font: 600 .62rem/1.2 var(--f-mono); color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.dial .ticks span:nth-child(2) { text-align: center; padding-right: 1.4em; }
+.dial .ticks span:nth-child(3) { text-align: center; padding-left: 1.4em; }
+.dial .ticks span:last-child { text-align: right; }
+.dial .out { margin-top: 16px; background: var(--sunken); border-radius: var(--radius); padding: 16px; }
+.dial .out h4 { font-size: 1.15rem; margin-bottom: 6px; }
+.dial .out p + p { margin-top: 6px; font-size: .9rem; color: var(--muted); }
+.audit { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: q; }
+.audit li { counter-increment: q; display: grid; grid-template-columns: 1.9rem 1fr; gap: 10px; }
+.audit li::before { content: counter(q); width: 1.9rem; height: 1.9rem; border-radius: 50%; display: grid; place-items: center; background: var(--brand-soft); color: var(--brand); font: 700 .85rem/1 var(--f-mono); }
+.gloss { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; margin: 0; }
+.gloss div { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.gloss dt { font-weight: 700; }
+.gloss dd { margin: 2px 0 0; color: var(--muted); font-size: .92rem; }
+.gloss dd small { font-family: var(--f-mono); font-size: .72rem; }
+
+footer.site { border-top: 1px solid var(--line); padding-block: 28px 40px; color: var(--muted); font-size: .88rem; }
+footer.site .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+/* Module page */
+.mhead { padding-block: 28px 20px; }
+.crumbs { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: .9rem; margin-bottom: 18px; }
+.crumbs a { text-decoration: none; font-weight: 700; }
+.mhead-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: end; }
+.mhead h1 { font-size: clamp(1.9rem, 4vw, 2.8rem); font-weight: 800; margin-top: 10px; }
+.mhead .hookline { margin-top: 12px; font-size: var(--step-1); color: var(--muted); max-width: 40em; }
+.mhead .meta { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.film { position: relative; aspect-ratio: 16 / 9; max-width: 100%; width: 100%; background: var(--film); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
+.film iframe, .film video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+.film .holder { position: absolute; inset: 14px; border: 2px dashed rgba(255,255,255,.18); border-radius: 10px; display: grid; place-content: center; justify-items: center; text-align: center; gap: 12px; color: #dfe7f1; padding: 20px; background: radial-gradient(120% 90% at 20% 0%, rgba(157,188,240,.16), transparent 60%), radial-gradient(90% 80% at 100% 100%, rgba(255,226,94,.08), transparent 60%); }
+.film .holder .play { width: 72px; height: 72px; border-radius: 50%; border: 2px solid rgba(255,255,255,.35); display: grid; place-items: center; }
+.film .holder .play svg { width: 26px; height: 26px; margin-left: 4px; fill: rgba(255,255,255,.55); }
+.film .holder h3 { font-size: clamp(1.1rem, 2.4vw, 1.6rem); color: #fff; }
+.film .holder p { color: #a9b8ca; font-size: .92rem; max-width: 30em; }
+.film .holder .slide-strip { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+.film .holder .slide-strip span { font: 600 .66rem/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; padding: 5px 7px; border-radius: 4px; background: rgba(255,255,255,.07); color: #c5d2e2; }
+.film .holder .btn { background: var(--mark); color: var(--mark-ink); border-color: transparent; }
+
+.tabs { scroll-margin-top: 84px; display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-top: 34px; overflow-x: auto; scrollbar-width: none; }
+.tabs button { flex: none; border: 0; background: none; padding: 12px 16px; font-weight: 700; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1px; display: flex; gap: 8px; align-items: center; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--brand); }
+.tabs .count { font: 600 .7rem/1 var(--f-mono); background: var(--sunken); padding: 3px 6px; border-radius: 999px; color: var(--muted); }
+.tabpanel { padding-block: 28px 12px; }
+
+.two { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 32px; align-items: start; }
+.prose { max-width: 42em; }
+.prose p + p { margin-top: .9em; }
+.ideas { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 14px; }
+.ideas li { display: grid; grid-template-columns: 2.2rem 1fr; gap: 12px; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.ideas li b.n { font: 800 1.3rem/1.1 var(--f-display); color: var(--brand); }
+.ideas li h4 { font-size: 1.05rem; margin-bottom: 4px; font-family: var(--f-body); font-weight: 700; letter-spacing: 0; }
+.ideas li p { color: var(--muted); font-size: .95rem; }
+.quote { margin: 0; padding: 18px 20px; border-left: 4px solid var(--mark); background: var(--surface); border-radius: 0 var(--radius) var(--radius) 0; font: 600 1.15rem/1.45 var(--f-display); }
+.side { display: grid; gap: 16px; position: sticky; top: 90px; }
+.side .panel { padding: 18px; }
+.side h4 { font-size: 1rem; margin-bottom: 8px; }
+.side ul { margin: 0; padding-left: 1.1em; color: var(--muted); font-size: .92rem; }
+.side ul li + li { margin-top: 4px; }
+
+/* Transcript */
+.tr-tools { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; }
+.search { flex: 1 1 260px; display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; }
+.search input { border: 0; outline: 0; background: transparent; flex: 1; min-width: 0; }
+.search:focus-within { border-color: var(--brand); }
+.slide { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 22px; padding: 22px 0; border-top: 1px solid var(--line); }
+.slide .lab { font: 600 .72rem/1.4 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.slide .lab b { display: block; font: 800 1.5rem/1 var(--f-display); color: var(--ink); letter-spacing: -.02em; margin-bottom: 6px; }
+.stage { display: inline-block; margin-top: 8px; padding: 3px 7px; border-radius: 4px; font-size: .64rem; background: var(--sunken); }
+.stage.hook { background: var(--mark); color: var(--mark-ink); }
+.stage.exit { background: var(--green-soft); color: var(--green); }
+.stage.intrigue { background: var(--brand-soft); color: var(--brand); }
+.slide h3 { font-size: 1.2rem; margin-bottom: 8px; }
+.slide .body p { max-width: 40em; }
+.slide .body p + p { margin-top: .8em; }
+.slide mark { background: var(--mark); color: var(--mark-ink); border-radius: 2px; }
+.slide.dim { opacity: .35; }
+
+/* Exercise */
+.ex-intro { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: start; margin-bottom: 26px; }
+.ex-intro h2 { font-size: var(--step-2); margin-bottom: 8px; }
+.ex-block { margin-top: 30px; }
+.ex-block > h3 { font-size: var(--step-1); margin-bottom: 12px; display: flex; gap: 10px; align-items: baseline; }
+.ex-block > h3 .eyebrow { font-size: .66rem; }
+.needs { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.needs li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; font-size: .94rem; }
+.needs li b { display: block; font: 600 .7rem/1.2 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.needs li.privacy { border-color: color-mix(in srgb, var(--red) 40%, var(--line)); background: color-mix(in srgb, var(--red-soft) 50%, var(--surface)); }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: st; }
+.steps li { counter-increment: st; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; transition: background .2s, border-color .2s; }
+.steps li.checked { background: color-mix(in srgb, var(--green-soft) 55%, var(--surface)); border-color: color-mix(in srgb, var(--green) 35%, var(--line)); }
+.steps li.checked .st-text > p:first-child { color: var(--muted); }
+.tick { appearance: none; width: 26px; height: 26px; border-radius: 7px; border: 2px solid var(--line); background: var(--surface); cursor: pointer; display: grid; place-items: center; margin: 0; position: relative; }
+.tick::after { content: counter(st); font: 700 .8rem/1 var(--f-mono); color: var(--muted); }
+.tick:checked { background: var(--green); border-color: var(--green); }
+.tick:checked::after { content: ""; width: 7px; height: 12px; border: solid var(--surface); border-width: 0 3px 3px 0; transform: rotate(45deg) translate(-1px, -1px); }
+.st-text { display: grid; gap: 10px; }
+.st-text b.lead { font-weight: 700; }
+.sub { padding: 10px 12px; border-radius: 8px; background: var(--sunken); font-size: .94rem; }
+.sub .eyebrow { display: block; margin-bottom: 4px; font-size: .64rem; }
+.sub.other { opacity: .6; }
+.prompt { display: flex; gap: 10px; align-items: flex-start; background: var(--film); color: #e6edf6; border-radius: 8px; padding: 12px 12px 12px 16px; font: 400 .9rem/1.55 var(--f-mono); }
+.prompt code { flex: 1; font: inherit; white-space: pre-wrap; min-width: 0; }
+.prompt code .ph { color: #ffe25e; }
+.prompt .btn { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.2); flex: none; }
+
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+table.rec { border-collapse: collapse; width: 100%; min-width: 560px; font-size: .94rem; }
+table.rec th, table.rec td { border-bottom: 1px solid var(--line); padding: 8px 10px; vertical-align: top; text-align: left; }
+table.rec tr:last-child > * { border-bottom: 0; }
+table.rec thead th { background: var(--sunken); font: 600 .72rem/1.3 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+table.rec tbody th { font-weight: 700; width: 26%; }
+table.rec td + td, table.rec th + td, table.rec th + th { border-left: 1px solid var(--line); }
+table.ref td, table.ref th { font-size: .92rem; }
+.swatch { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; }
+.swatch i { width: 18px; height: 18px; border-radius: 4px; display: inline-grid; place-items: center; font: 700 .62rem/1 var(--f-mono); font-style: normal; color: var(--surface); }
+.swatch.g i { background: var(--green); } .swatch.a i { background: var(--amber); } .swatch.r i { background: var(--red); }
+textarea.f, input.f, select.f { width: 100%; border: 1px solid transparent; background: var(--sunken); border-radius: 6px; padding: 7px 9px; resize: vertical; min-height: 2.3em; line-height: 1.45; }
+textarea.f:hover, input.f:hover, select.f:hover { border-color: var(--line); }
+textarea.f:focus, input.f:focus, select.f:focus { outline: none; border-color: var(--brand); background: var(--surface); }
+.qs { display: grid; gap: 14px; }
+.qs label { display: grid; gap: 6px; font-weight: 700; }
+.qs textarea.f { min-height: 4.5em; font-weight: 400; }
+.score { display: inline-flex; align-items: baseline; gap: 8px; margin-top: 12px; padding: 10px 14px; border-radius: var(--radius); background: var(--brand-soft); }
+.score b { font: 800 1.6rem/1 var(--f-display); color: var(--brand); font-variant-numeric: tabular-nums; }
+.example { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 16px 18px; font-style: italic; }
+.example .eyebrow { font-style: normal; display: block; margin-bottom: 8px; }
+
+/* Tools */
+.tool { border: 2px solid var(--brand); border-radius: 14px; padding: 20px; background: var(--surface); }
+.tool-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.tool-head h3 { font-size: 1.15rem; }
+.tool-head .tag { font: 600 .66rem/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; background: var(--brand); color: var(--on-brand); padding: 5px 8px; border-radius: 4px; }
+.hl-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: .86rem; color: var(--muted); margin-bottom: 12px; }
+.hl-text { font-size: 1.04rem; line-height: 1.9; padding: 16px; background: var(--sunken); border-radius: var(--radius); }
+.hl-text .s { cursor: pointer; border-radius: 3px; padding: 1px 0; transition: background .15s; }
+.hl-text .s:hover { box-shadow: 0 0 0 2px var(--line); }
+.hl-text .s[data-c="G"] { background: var(--green-soft); box-shadow: inset 0 -3px 0 var(--green); }
+.hl-text .s[data-c="A"] { background: var(--amber-soft); box-shadow: inset 0 -3px 0 var(--amber); }
+.hl-text .s[data-c="R"] { background: var(--red-soft); box-shadow: inset 0 -3px 0 var(--red); }
+.hl-text .s[data-c]::after { content: attr(data-c); font: 700 .62rem/1 var(--f-mono); vertical-align: super; margin-left: 2px; }
+.hl-text .s[data-c="G"]::after { color: var(--green); } .hl-text .s[data-c="A"]::after { color: var(--amber); } .hl-text .s[data-c="R"]::after { color: var(--red); }
+.hl-counts { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+.hl-counts .c { padding: 6px 12px; border-radius: 999px; font: 600 .82rem/1 var(--f-mono); background: var(--sunken); font-variant-numeric: tabular-nums; }
+.hl-counts .c.g { color: var(--green); background: var(--green-soft); } .hl-counts .c.a { color: var(--amber); background: var(--amber-soft); } .hl-counts .c.r { color: var(--red); background: var(--red-soft); }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.decl-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.decl-grid label { display: grid; gap: 4px; font-size: .86rem; font-weight: 700; }
+.decl-out { margin-top: 14px; padding: 16px; border-radius: var(--radius); background: var(--sunken); font-size: 1.02rem; }
+.decl-out.empty { color: var(--muted); font-style: italic; }
+.timer { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.timer .clock { font: 700 clamp(2.4rem, 7vw, 3.6rem)/1 var(--f-mono); font-variant-numeric: tabular-nums; letter-spacing: -.03em; }
+.timer .clock.over { color: var(--red); }
+.sbs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
+.sbs label { display: grid; gap: 6px; font-weight: 700; }
+.sbs textarea.f { min-height: 14em; font-weight: 400; }
+.wc { font: 400 .76rem/1 var(--f-mono); color: var(--muted); font-weight: 400; }
+
+/* Reflect */
+.reflect-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; }
+.reflect-card .q { font: 600 1.2rem/1.45 var(--f-display); margin-block: 10px 16px; max-width: 40em; }
+.reflect-card textarea.f { min-height: 14em; }
+.meter { display: flex; align-items: center; gap: 12px; margin-top: 10px; font: 400 .8rem/1 var(--f-mono); color: var(--muted); }
+.meter .track { flex: 1; height: 6px; background: var(--sunken); border-radius: 3px; position: relative; overflow: hidden; }
+.meter .track .zone { position: absolute; top: 0; bottom: 0; left: 50%; width: 33.3%; background: color-mix(in srgb, var(--green) 25%, transparent); }
+.meter .track .fill { position: absolute; top: 0; bottom: 0; left: 0; background: var(--brand); border-radius: 3px; transition: width .2s; }
+details.other { margin-top: 16px; }
+details.other summary { cursor: pointer; font-weight: 700; color: var(--brand); }
+details.other p { margin-top: 8px; color: var(--muted); }
+
+.mfoot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 40px; padding-block: 24px; border-top: 1px solid var(--line); }
+.mfoot .nav { display: flex; gap: 10px; flex-wrap: wrap; }
+.complete-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); opacity: 0; background: var(--ink); color: var(--paper); padding: 10px 18px; border-radius: 999px; font-weight: 700; font-size: .9rem; transition: .25s; pointer-events: none; z-index: 50; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.confirm { display: inline-flex; gap: 8px; align-items: center; font-size: .88rem; }
+
+@media (max-width: 920px) {
+  .hero .wrap, .two { grid-template-columns: 1fr; }
+  .path { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .k-trace, .k-dial, .k-audit, .k-gloss { grid-column: span 12; }
+  .side { position: static; }
+}
+@media (max-width: 640px) {
+  .wrap { padding-inline: 16px; }
+  .path, .needs, .gloss, .decl-grid, .sbs { grid-template-columns: 1fr; }
+  .slide { grid-template-columns: 1fr; gap: 8px; }
+  .slide .lab b { display: inline; margin-right: 8px; font-size: 1.1rem; }
+  .trace li { grid-template-columns: 2rem 1fr; }
+  .trace .d { grid-column: 2; }
+  .mhead-grid, .ex-intro { grid-template-columns: 1fr; }
+  .film .holder .slide-strip, .film .holder p { display: none; }
+  .brand small { display: none; }
+}
+@media (max-width: 480px) { .pips { display: none; } }
+</style>
+
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#home"><span class="brand-mark">AI</span><span>AI Literacy Hub<small>Staff and student training</small></span></a>
+    <div class="seg" role="group" aria-label="I am taking this as">
+      <button type="button" data-aud="student" aria-pressed="true">Student</button>
+      <button type="button" data-aud="staff" aria-pressed="false">Staff</button>
+    </div>
+    <div class="pips" id="pips" aria-label="Course progress"></div>
+  </div>
+</header>
+
+<main id="app"></main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ====================================================================
+   VIDEOS — add each module's film here when it is ready.
+   src accepts:
+     • a file in this folder, e.g. "videos/module-1.mp4" (.mp4 .webm .m4v)
+     • a YouTube or Vimeo link, e.g. "https://youtu.be/abc123"
+     • any embed link from Panopto, Microsoft Stream, Kaltura etc.
+   captions (optional, files only): a WebVTT file, e.g. "videos/module-1.vtt"
+   poster   (optional, files only): an image shown before playback
+   Leave src empty to show the "coming soon" holding space.
+   ==================================================================== */
+const VIDEOS = {
+  1: { src: "", captions: "", poster: "" },
+  2: { src: "", captions: "", poster: "" },
+  3: { src: "", captions: "", poster: "" },
+  4: { src: "", captions: "", poster: "" },
+  5: { src: "", captions: "", poster: "" },
+  6: { src: "", captions: "", poster: "" },
+};
+
+/* Transcripts are the original module-N-transcript.md files. */
+const TRANSCRIPTS = {
+ "1": "# Module 1: How AI Works – Transcript\n\n[SLIDE 1: Title – HOOK]\n\n**HOOK**\n\nThe AI tool you use for your studies or your work has never once checked whether anything it tells you is true. And yet it sounds more confident than most people you know.\n\n[SLIDE 2: The puzzle – INTRIGUE]\n\n**INTRIGUE**\n\nHow can that be? There is one simple idea that explains it, and once you have it, you will read every AI answer differently. You do not need any technical background. If you can use the predictive text on your phone, you already know most of what you need. Let me show you.\n\n[SLIDE 3: It predicts the next word – DELIVERY]\n\n**DELIVERY**\n\nType \"See you\" into your phone and it might offer \"later\" or \"soon\". It has not understood your plans. It has simply noticed which words tend to follow which.\n\nTools such as ChatGPT, Copilot and Claude do the same kind of thing, on a vastly greater scale. Given the words so far, the tool works out which word, or fragment of a word, is most likely to come next. It adds that word, then repeats the calculation for the one after. And again. And again. An entire essay, poem or piece of computer code is built one small step at a time.\n\n[SLIDE 4: Trained on patterns, not on the world – DELIVERY]\n\nSo how does it know what is likely? It has been trained on an enormous collection of text: books, articles, websites, discussion forums and more. During training, the system is shown passages with words hidden and asked to guess them. When it guesses wrongly, its internal settings are nudged very slightly. Repeat that billions of times, and the system becomes extraordinarily good at reproducing the patterns of human writing.\n\nImagine someone who has read an immense library, but who was never allowed to visit the places described, meet the people, or check a single fact. They would know a great deal about how people write about the world, and much less about the world itself. That is a helpful picture of what these tools are.\n\n[SLIDE 5: Fluent is not the same as true – DELIVERY]\n\nHere is the key point. The tool is aiming for text that is plausible, not text that is true.\n\nMost of the time the two overlap, because most of what people write is broadly accurate. But where the training material is thin, mixed or contradictory, the tool still produces something that sounds right. It has no inner alarm that says, \"I am not sure about this.\" So it can invent a reference, a quotation or a statistic, and deliver it with exactly the same calm confidence as a basic fact.\n\nYou will often hear this called a \"hallucination\", which makes it sound like a rare glitch. It is better to think of it as the normal process working as designed: a convincing sentence that happens not to be correct.\n\n[SLIDE 6: What this means for you – DELIVERY]\n\nSo what does this mean for you? Three things.\n\nFirst, treat fluency as a style, not as evidence. A polished paragraph tells you the tool is skilled with language. It tells you nothing about whether the content is accurate.\n\nSecond, the way you ask shapes what you get. The tool follows the pattern your words set up, so a loaded question or a hidden assumption will steer the answer. Ask about \"the myth of\" something and you will get a very different response from asking about \"the cause of\" it.\n\nThird, you remain the person who knows, or who finds out. The tool is not weighing whether it is right, so someone has to, and that someone is you.\n\n[SLIDE 7: Your next step – EXIT]\n\n**EXIT**\n\nNow try it for yourself. Open the exercise document for this module and ask an AI tool two questions that differ by just one word. It takes about fifteen minutes, and it is surprisingly revealing. Then write down what you noticed, and bring it to Module 2, where we look at what AI is good for, and what it should never be trusted to do.\n",
+ "2": "# Module 2: What Generative AI Is and Is Not – Transcript\n\n[SLIDE 1: Title – HOOK]\n\n**HOOK**\n\nAsk an AI tool for five academic references and it will give you five. Some of them will not exist.\n\n[SLIDE 2: The puzzle – INTRIGUE]\n\n**INTRIGUE**\n\nAnd you will not be able to tell which ones by looking. So where does that leave a tool that millions of students and staff now use daily? Is it useless? Far from it. But there is a clear line between what it does well and what it should never be trusted to do, and most mistakes happen when people cross it without noticing. In the next few minutes, I will show you where that line sits.\n\n[SLIDE 3: A useful tool – DELIVERY]\n\n**DELIVERY**\n\nLet's start with what generative AI is good for. It is genuinely useful for shaping, rearranging and exploring language and ideas that you already have in front of you.\n\nIt can help you brainstorm angles for an essay or a project. It can turn a messy page of notes into a tidy outline. It can explain a difficult passage in plainer words, translate a paragraph, suggest a clearer structure, or play the part of a sceptical reader and tell you where your argument is hard to follow. For staff, it can draft a routine email, or suggest different ways to explain a tricky concept to a first-year class.\n\nWhat these uses share is that you supply the substance, or you can easily judge the result. The tool is a sparring partner and a fast first-drafter. It is not the source of the truth.\n\n[SLIDE 4: Not a search engine – DELIVERY]\n\nNow the other side. The most common mistake is to treat a generative AI tool like a search engine.\n\nA search engine finds existing pages and points you to them. You can click through, see who wrote the page, and judge whether to trust it. A generative AI tool produces new text that resembles what a good answer would look like. Sometimes it is accurate. Sometimes it is a smooth blend of fact and fiction, and nothing on the screen tells you which part is which.\n\nSome tools now search the web and summarise what they find, which is a real improvement. But the summary is still generated text, and it can misreport the pages it cites. The sensible habit is to follow the links and read the sources yourself.\n\n[SLIDE 5: Not a library – DELIVERY]\n\nThe risk is sharpest with references. A tool may give you a tidy list with authors, titles, journals and page numbers. Some will be real. Some will be invented, with plausible authors and plausible titles that no library holds. A fake reference looks just like a real one, because it was built from the same patterns.\n\nA library catalogue or a published journal is a different kind of thing. Someone chose to put each item there, and you can check it. That is the standard of evidence a university expects.\n\n[SLIDE 6: Not an author or an authority – DELIVERY]\n\nThere is a third thing the tool is not: an author. It cannot hold an opinion, stand behind a claim, or be questioned about how it reached a conclusion. It has no reputation to protect and nothing to lose if it is wrong.\n\nThat is why responsibility cannot be passed to it. If you put something forward under your name, you are answerable for every claim in it. \"The AI told me\" is no better a defence than \"a stranger in the pub told me\".\n\nHere is a simple test to use before any task: \"Am I asking the tool to help me think, or to tell me what is true?\" The first is a good use. The second needs a trustworthy source alongside it.\n\n[SLIDE 7: Your next step – EXIT]\n\n**EXIT**\n\nNow put the tool to the test. In the exercise for this module, you will ask an AI tool to summarise a real article from your field, with quotations and references, and then check every one. Many people are surprised by what they find. Record your results, and join me for Module 3, where we learn to read AI output with a critical eye.\n",
+ "3": "# Module 3: Characteristics of AI Outputs – Transcript\n\n[SLIDE 1: Title – HOOK]\n\n**HOOK**\n\nYou can often feel when a piece of writing was produced by AI. But can you say why? And would you stake a student's reputation on it?\n\n[SLIDE 2: The puzzle – INTRIGUE]\n\n**INTRIGUE**\n\nHere is the surprising part. The features that make AI text feel odd are not the ones that should worry you most. The real dangers are quieter, and they are hiding in text that reads beautifully. In the next few minutes, I will give you four things to look for, and a simple audit you can apply to any piece of AI output, including your own drafts.\n\n[SLIDE 3: Confident and wrong – DELIVERY]\n\n**DELIVERY**\n\nThe first characteristic is fluent inaccuracy. AI-generated text is almost always smoothly written, well punctuated and confident in tone. That polish is exactly what makes errors hard to spot. A wrong date, an invented quotation or a statistic with no real source will sit in the middle of a perfectly sensible paragraph, looking no different from the correct material around it.\n\nSo do not let the quality of the writing lower your guard. Ask of any specific claim: where does this come from, and could I find it?\n\n[SLIDE 4: The missing trail – DELIVERY]\n\nThe second characteristic is a missing trail. In scholarly writing, a claim usually points somewhere: to a study, a dataset, a case, a named author. AI text often makes claims that float free. You will see phrases such as \"research shows\" or \"experts agree\" with no indication of which research or which experts. Treat each of these as a question mark. Either track down the real evidence, or leave the claim out.\n\n[SLIDE 5: The comfortable middle – DELIVERY]\n\nThe third characteristic is sameness. Because the tool favours the most likely phrasing, its writing tends toward the average: stock openings that paint a broad picture, balanced sentences, lists of three, and cautious conclusions saying a \"balanced approach\" is needed. Real academic work often takes a position or makes a surprising connection. If a passage could appear in any essay on any topic, it probably tells you very little.\n\nA caution is needed. Spotting a few of these habits does not prove that a person used AI, as many careful human writers produce similar prose. Style alone is poor evidence, so use these features to read critically, never to accuse.\n\n[SLIDE 6: Whose view of the world? – DELIVERY]\n\nThe fourth characteristic is bias. The tool learned from text that is not a fair sample of humanity. A great deal of it is in English and reflects wealthier, Western and online perspectives. As a result, the tool may treat some viewpoints as the default, underrepresent voices from other regions or languages, or repeat stereotypes it absorbed. Bias often sits in what is left out: whose examples are used, and whose work is never mentioned. \"Who is missing from this answer?\" is a powerful check.\n\n[SLIDE 7: A simple audit – DELIVERY]\n\nPutting these together, here is a four-question audit. What exactly is being claimed? What is the evidence for each claim? What is the tone doing, and where is it vague or padded? And whose perspective is shown, and whose is missing? Then verify the claims that matter against reliable sources before you rely on them.\n\n[SLIDE 8: Your next step – EXIT]\n\n**EXIT**\n\nNow practise it. In the exercise, you will generate a short passage and mark it up with a simple colour code: green, amber and red. Count what you find, and write down what surprised you. Then come to Module 4, where we step back and look at the wider world of AI in universities.\n",
+ "4": "# Module 4: The AI-Rich Environment – Transcript\n\n[SLIDE 1: Title – HOOK]\n\n**HOOK**\n\nSoftware that claims to catch AI-written essays has wrongly flagged work by real students. And it has done so most often for students writing in their second language.\n\n[SLIDE 2: The puzzle – INTRIGUE]\n\n**INTRIGUE**\n\nSo if we cannot reliably catch AI use, and we cannot realistically avoid AI altogether, what are universities supposed to do? There is an answer that is gaining ground, and it asks for something different from everyone involved, staff and students alike. Let me show you.\n\n[SLIDE 3: AI is everywhere – DELIVERY]\n\n**DELIVERY**\n\nFirst, the setting. AI is no longer something you visit on a special website. It is built into word processors, email, search tools and learning platforms. This is what we call an AI-rich environment.\n\nIn such an environment, \"Did you use AI?\" quickly becomes unhelpful. A spelling suggestion uses AI. So does a tool that summarises your emails. A better question is: how, and why, was it used? Was it on purpose, for a clear reason, with the person staying in charge? Or out of habit, to dodge the thinking the task was meant to develop?\n\n[SLIDE 4: Why detection is not the answer – DELIVERY]\n\nWhen AI tools first spread, many universities hoped for a technical fix: software that could tell whether a text was written by a person or a machine. That hope has not been borne out.\n\nDetectors give probabilities, not proof. They miss AI text that has been lightly edited, and they wrongly flag human writing. Research from Stanford University found that some detectors flagged a large proportion of essays by people whose first language is not English, simply because their careful, formal phrasing resembled what the detector expected from a machine.\n\nThink what that means: an accusation, with real consequences, based on a tool that is least reliable for some of our own international and multilingual students. That is why many universities now rely on clearer rules and better-designed tasks instead.\n\n[SLIDE 5: The four settings – DELIVERY]\n\nClear rules usually work like a dial, set task by task. Your own institution's wording will differ, so always check its policy, but the idea is similar.\n\nAt one end, AI is not permitted, because the point is to show what you can do unaided, as in a closed-book exam or a live discussion. Next is minimal use: spelling, grammar and formatting help, but no generated content. Then permitted use: AI can help with ideas, structure or feedback, but the analysis and writing are your own, and you say how you used it. Finally, integrated use: the task asks you to work with AI and analyse what it does.\n\nNone of these settings is better than another. Each fits a different learning purpose.\n\n[SLIDE 6: Designing tasks that value thinking – DELIVERY]\n\nFor staff, a clear statement is only half the job. A standard \"write 1,000 words summarising this topic\" brief is easy to complete with one prompt. Tasks that ask more of the person are harder to hand over: local or personal examples, a short conversation to explain decisions, notes on how the work developed, or evaluating AI output rather than simply producing text.\n\nFor students, the matching habit is honesty. Say what you used, what for, and what you checked. Being open protects you far better than trying to hide it.\n\n[SLIDE 7: Your next step – EXIT]\n\n**EXIT**\n\nNow try it on a real task. In the exercise, you will take an assessment or work task, test how easily AI could complete it, and redesign it so that thinking is what counts. Then join me for Module 5, where we look at privacy, honesty and a practical routine for using AI responsibly.\n",
+ "5": "# Module 5: Good, Ethical and Safe AI Use – Transcript\n\n[SLIDE 1: Title – HOOK]\n\n**HOOK**\n\nAnything you paste into a public AI tool has left your control. You cannot reliably get it back.\n\n[SLIDE 2: The puzzle – INTRIGUE]\n\n**INTRIGUE**\n\nSo how do you get the benefits of these tools without putting other people's information, or your own reputation, at risk? It comes down to a few simple guardrails, and a seven-step routine that researchers in higher education have developed to keep people in charge. By the end of this film, you will have both.\n\n[SLIDE 3: Mind what you share – DELIVERY]\n\n**DELIVERY**\n\nLet's start with privacy, because that is where harm is most easily done without anyone noticing.\n\nWhen you type or paste something into a public AI tool, you are sending it to a company's computers. Depending on the service and your settings, it may be stored, reviewed by people, or used to improve future versions.\n\nSo do not put in personal or confidential information. That includes student records and marks, other people's unpublished work, interview transcripts, health or personal details, and unpublished research data. In the United Kingdom, personal data is protected by data protection law, and your university will have its own policy. If in doubt, ask before you paste.\n\n[SLIDE 4: Anonymise, or leave it out – DELIVERY]\n\nSometimes you have good reason to ask a tool for help with material that contains personal details. First ask whether you need to share it at all. If you do, remove names, places, dates and anything that could identify someone, including combinations of details that point to one person. Do this before you paste, not afterwards. Better still, check whether your university provides an approved tool with stronger protections, and use that.\n\n[SLIDE 5: Credit and over-trust – DELIVERY]\n\nTwo further guardrails. First, credit. Other people's work sits behind what these tools produce, and they do not tell you where ideas came from. When you rely on someone's ideas, find and cite the real source, and remember that the final work, and any mistakes in it, are yours.\n\nSecond, over-trust. Humans tend to trust a confident machine, especially when busy, and over time we check less and less. This is known as automation bias. The antidote is a deliberate routine.\n\n[SLIDE 6: A routine you can follow – DELIVERY]\n\nThat routine is called TRACE-AI. Seven steps.\n\nTarget: decide what you are trying to do, and whether AI is appropriate. Request: ask clearly, with context. Audit: read the output critically, as we practised in Module 3. Corroborate: check important claims against reliable sources. Elaborate: do the real thinking yourself, in your own words. Act: make your own decision and be open about how you used AI. Inspect: reflect on what you learned and what you are still unsure about.\n\nYou will not need all seven steps for every small task. For work that matters, they keep you in charge.\n\n[SLIDE 7: Declare what you did – DELIVERY]\n\nBeing open deserves a closer look. A short declaration of AI use builds trust, and it need only say four things: which tool you used, what for, how you checked the output, and what you contributed yourself. If your university has a standard form, use that.\n\n[SLIDE 8: Your next step – EXIT]\n\n**EXIT**\n\nNow practise. In the exercise, you will anonymise a sample text, use an AI tool on the cleaned version, and write a short declaration. Keep your declaration, because you can adapt it for real work. Then join me for the final module, on the skill of knowing when not to use AI at all.\n",
+ "6": "# Module 6: Intentional Non-Use – Transcript\n\n[SLIDE 1: Title – HOOK]\n\n**HOOK**\n\nWhat if the most advanced AI skill is choosing not to use it?\n\n[SLIDE 2: The puzzle – INTRIGUE]\n\n**INTRIGUE**\n\nOver the past five films, we have learned how AI works, where it fails, and how to use it responsibly. But there is one more idea, and it may matter most for anyone whose work is learning and thinking. It concerns something that feels like a cost, but turns out to be a benefit. Let me explain.\n\n[SLIDE 3: Effort is part of learning – DELIVERY]\n\n**DELIVERY**\n\nWhen something is hard, we usually feel it: the long read of a dense article, the struggle to start an argument, the third attempt at a sentence that will not come out right. We are tempted to see that struggle as a cost to be removed.\n\nBut in many cases the struggle is where the learning happens. Reading closely, wrestling with competing evidence, and finding your own words for an idea are the activities that build understanding and memory. They are not obstacles on the way to the learning. They are the learning.\n\n[SLIDE 4: Handing over the effort – DELIVERY]\n\nPsychologists use the term cognitive offloading for passing mental work to an outside aid. We do it all the time, and often sensibly. A shopping list or a calendar reminder frees up your mind for other things.\n\nBut there is a paradox. Offloading helps when the freed-up effort is put to better use. If a tool does the very thinking the task was meant to develop, you may finish faster while learning less. Early research suggests that heavy, uncritical reliance on AI tools is associated with weaker recall and less independent critical thinking. This is a developing area, so we should hold the findings with humility. But the logic is familiar from experience: think how a satnav can make us worse at knowing our own town.\n\n[SLIDE 5: Two kinds of task – DELIVERY]\n\nA helpful distinction is between tasks where the output is what matters, and tasks where the process is what matters.\n\nIf you need a tidy meeting agenda, the output is the point, and using a tool may be perfectly sensible. If you are a student learning to build an argument, or a lecturer working out how to explain an idea, the process is the point. The thinking is the product. Handing that over is like paying someone else to go to the gym for you.\n\n[SLIDE 6: Times to choose not to – DELIVERY]\n\nSo when might you choose not to use AI?\n\nWhen you are learning something for the first time and need to build a foundation of your own. When you are forming an original idea or position, which should begin in your own head. When your voice and experience are the whole point, such as a personal statement or a reflection on your own practice. When the task is meant to assess what you can do unaided. And when someone needs real human attention, such as sensitive feedback to a student, or support for a struggling colleague.\n\n[SLIDE 7: A choice, not a rule – DELIVERY]\n\nThis is not an argument against AI. It is an argument for choice. Using the tools well and sometimes leaving them alone are two halves of the same skill. A useful question is: \"If this tool vanished tomorrow, would I still be able to do this?\" If the answer is no, and you need to be able to, that is the signal to practise unaided.\n\nFor staff, the same applies to course design: build in moments where students think, write and talk without AI, and explain why. When people understand the reason, they value those moments.\n\n[SLIDE 8: Your next step – EXIT]\n\n**EXIT**\n\nFor your final exercise, write a short piece about your own academic or professional journey with no tools at all, then compare it with an AI version of the same piece. Notice which one is yours. Then take a moment to decide one thing you will deliberately keep doing without AI. Thank you for taking part in this series.\n"
+};
+
+const MODULES = [
+ { n: 1, title: "How AI Works", hook: "The AI tool you use has never once checked whether anything it tells you is true. And yet it sounds more confident than most people you know.",
+   summary: "One simple idea explains why AI sounds so sure of itself, and once you have it you will read every AI answer differently.",
+   ideas: [
+    ["It predicts the next word", "Like your phone's predictive text, on a vastly greater scale. Each word, or fragment, is the most likely one to follow the words so far."],
+    ["Trained on patterns, not on the world", "It has read an immense library but never visited the places or checked a single fact. It knows how people write about the world, not the world itself."],
+    ["Fluent is not the same as true", "It aims for plausible text. A 'hallucination' is the normal process working as designed: a convincing sentence that happens to be wrong."],
+    ["You remain the person who knows", "Treat fluency as a style, not evidence. Your wording steers the answer. Someone has to weigh whether it is right, and that is you."]],
+   ex: {
+    title: "One Word Changes the Answer", time: 15,
+    intro: "You will see for yourself that an AI tool follows the pattern of your words, not the truth of the matter. Ask it two near-identical questions, compare the answers, and write down what you notice.",
+    needs: [["You will need", "Any AI chat tool your university approves (for example Microsoft Copilot, ChatGPT or Claude), and somewhere to write notes."],
+            ["Choose a topic", "From your own subject, where you already know the main arguments. For example: student drop-out rates, the cost of renewable energy, social media use among teenagers."]],
+    privacy: "Use only general topics. Do not include personal, confidential or unpublished information in your prompts.",
+    steps: [
+     { t: "Open your AI tool and start a new chat." },
+     { t: "Type Prompt A, replacing the words in square brackets with your topic.", prompt: 'Complete this sentence in five different ways: "The main cause of [your topic] is..."' },
+     { t: "Copy the five answers into the table below." },
+     { t: "Start another new chat, so the first conversation cannot influence it. Type Prompt B, which changes only one word.", prompt: 'Complete this sentence in five different ways: "The main myth about [your topic] is..."' },
+     { t: "Copy the five answers into the table. Then, in the same chat, ask the follow-up below. Note whether the tool's confidence matches what you know about the subject.", prompt: "How sure are you about each of these?" }],
+    tables: [{ cols: ["", "Prompt A (main cause)", "Prompt B (main myth)"], rows: ["Answer 1", "Answer 2", "Answer 3", "Answer 4", "Answer 5", "Overlap between A and B", "How sure did the tool say it was?"] }],
+    questions: ["What changed between the two sets of answers, and what stayed the same?", "Did the tool tell you anything that was inaccurate or that you could not verify?", "What does this suggest about the way your own wording shapes AI answers?"] },
+   reflect: {
+    student: "A tool can write a flawless paragraph on a topic. How is that different from you explaining an idea you truly understand? Now that you know the tool works by probability, how much will you trust its first answer in future, and what will you do differently?",
+    staff: "How might students in your subject be misled by the polish of AI answers? What one cue, example or activity could you build into your teaching to remind learners that these tools predict likely wording rather than check facts?" } },
+
+ { n: 2, title: "What Generative AI Is and Is Not", hook: "Ask an AI tool for five academic references and it will give you five. Some of them will not exist.",
+   summary: "There is a clear line between what AI does well and what it should never be trusted to do. Most mistakes happen when people cross it without noticing.",
+   ideas: [
+    ["A useful tool", "Good for shaping language and ideas you already have: brainstorming, outlining notes, explaining a hard passage, playing the sceptical reader. A sparring partner, not the source of truth."],
+    ["Not a search engine", "A search engine points you to existing pages. A generative tool produces new text that resembles a good answer. Even web-searching tools can misreport what they cite."],
+    ["Not a library", "A fake reference looks just like a real one, because it was built from the same patterns. A catalogue holds items someone chose and you can check."],
+    ["Not an author or an authority", "It cannot stand behind a claim. 'The AI told me' is no better a defence than 'a stranger in the pub told me'. Ask: am I asking it to help me think, or to tell me what is true?"]],
+   ex: {
+    title: "The Fact-Check Audit", time: 25,
+    intro: "Test an AI tool on something you can check for yourself: a real article or book from your own field, with its quotations and references. Find out how much of the answer you can verify.",
+    needs: [["You will need", "An AI tool your university approves, and a real article or book chapter from your field that you can open and read."],
+            ["For checking", "Your university library search or Google Scholar to look up references."]],
+    privacy: "Use only published works. Do not include personal or confidential information in your prompts.",
+    steps: [
+     { t: "Choose a real published article or book chapter that you can open. Note its title, author and year." },
+     { t: "Start a new chat and type:", prompt: "Summarise the key arguments of [title, author, year] in about 200 words. Include three direct quotations with page numbers, and give full references for three related sources." },
+     { t: "Read the summary against the original. Is it accurate and fair?" },
+     { t: "For each quotation, search the original for the exact wording. Mark it verbatim, paraphrased or not found." },
+     { t: "For each of the three references, search your library catalogue or Google Scholar by title and author. Mark it real and correct, real but details wrong, or could not find." },
+     { t: "Optional: tell the tool that one quotation could not be found, and watch how it responds. Does it admit the problem, or offer a new one?" }],
+    tables: [{ id: "audit", cols: ["Item", "What the tool claimed", "Result", "Notes"], rows: [
+      ["Summary as a whole", ["Accurate", "Partly accurate", "Inaccurate"]],
+      ["Quotation 1", ["Verbatim", "Paraphrased", "Not found"]], ["Quotation 2", ["Verbatim", "Paraphrased", "Not found"]], ["Quotation 3", ["Verbatim", "Paraphrased", "Not found"]],
+      ["Reference 1", ["Real and correct", "Details wrong", "Not found"]], ["Reference 2", ["Real and correct", "Details wrong", "Not found"]], ["Reference 3", ["Real and correct", "Details wrong", "Not found"]]] }],
+    score: true,
+    questions: ["Out of the six checkable items (three quotations, three references), how many were fully correct?", "Could you have told which were wrong just by reading them? What does that tell you?", "What would you do differently the next time you use AI for reading or sources?"] },
+   reflect: {
+    student: "Look back at your results. Suppose a fake reference that looked completely real had gone into an assignment. What risks would you and your reader have faced? Describe a checking routine you will use whenever AI helps with your reading or drafting.",
+    staff: "How could you design a learning activity that lets students use AI for early brainstorming or structural feedback, while keeping source-finding and fact-checking firmly in their own hands?" } },
+
+ { n: 3, title: "Characteristics of AI Outputs", hook: "You can often feel when a piece of writing was produced by AI. But can you say why? And would you stake a student's reputation on it?",
+   summary: "The features that make AI text feel odd are not the ones that should worry you most. The real dangers are quieter, and they hide in text that reads beautifully.",
+   ideas: [
+    ["Confident and wrong", "Fluent inaccuracy: a wrong date or invented quotation sits in a perfectly sensible paragraph. Ask of any specific claim: where does this come from, and could I find it?"],
+    ["The missing trail", "'Research shows' and 'experts agree' with no indication of which. Treat each as a question mark: find the real evidence, or leave the claim out."],
+    ["The comfortable middle", "Stock openings, lists of three, a 'balanced approach'. These habits do not prove AI use, since careful humans write this way too. Use them to read critically, never to accuse."],
+    ["Whose view of the world?", "Training text over-represents English-language, wealthier, Western and online voices. Bias often sits in what is left out. Ask: who is missing from this answer?"]],
+   ex: {
+    title: "Green, Amber, Red", time: 25,
+    intro: "Generate a short passage with an AI tool, mark it up with a three-colour code, and apply the four-question audit from the film. The aim is to build the habit of reading AI output closely.",
+    needs: [["You will need", "An AI tool your university approves. The highlighter on this page does the marking for you, or use a printout and three coloured pens."],
+            ["Choose a topic", "A debated topic from your own subject."]],
+    privacy: "Choose a general topic. Do not include personal or confidential information in your prompt.",
+    extra: "colours",
+    tool: "highlighter",
+    steps: [
+     { t: "Choose a debated topic in your field. Start a new chat and type:", prompt: "Write about 300 words arguing a position on [your topic]. Include evidence." },
+     { t: "Paste the answer into the highlighter above." },
+     { t: "Read it once without marking anything." },
+     { t: "Read it again and mark every sentence green, amber or red. If you are unsure, choose the more cautious colour." },
+     { t: "Choose at least two red claims and try to verify them using your library or other reliable sources. Note what you find." },
+     { t: "Fill in the count table below. The highlighter can do this for you." },
+     { t: "Answer the four audit questions." }],
+    tables: [
+     { id: "counts", cols: ["Colour", "Number of sentences", "One example sentence"], rows: ["Green", "Amber", "Red", "Total"] },
+     { title: "Two red claims I checked, and what I found", cols: ["", "The claim", "What I found"], rows: ["Claim 1", "Claim 2"] },
+     { title: "The four-question audit", cols: ["Question", "Your notes"], rows: ["What exactly is claimed? List the two most important claims.", "What is the evidence for each? Where did the tool give none?", "What is the tone doing? Quote one vague or padded phrase.", "Whose perspective is shown, and whose is missing?"] }] },
+   reflect: {
+    student: "Which stylistic habits did you notice in the AI's writing? How could relying on this kind of text flatten your own academic voice and perspective?",
+    staff: "How could you use output auditing as a teaching activity, or as a marking criterion, to assess students' evaluative judgement and not only their final text?" } },
+
+ { n: 4, title: "The AI-Rich Environment", hook: "Software that claims to catch AI-written essays has wrongly flagged work by real students, most often students writing in their second language.",
+   summary: "If we cannot reliably catch AI use, and cannot realistically avoid it, what should universities do? An answer is gaining ground, and it asks something of staff and students alike.",
+   ideas: [
+    ["AI is everywhere", "It is built into word processors, email, search and learning platforms. 'Did you use AI?' becomes unhelpful. Ask how, and why, it was used."],
+    ["Detection is not the answer", "Detectors give probabilities, not proof. Research from Stanford found some flagged a large share of essays by non-native English writers."],
+    ["Four settings, set task by task", "Not permitted, minimal, permitted, integrated. None is better than another: each fits a different learning purpose. Check your own institution's wording."],
+    ["Design tasks that value thinking", "Staff: local examples, short conversations, process notes, critiques of AI output. Students: say what you used, what for, and what you checked."]],
+   ex: {
+    title: "Map and Redesign a Task", time: 30,
+    intro: "Take a real assessment or work task, test how easily an AI tool could complete it, and then redesign it, or plan how to clarify it, so that human thinking is what counts.",
+    needs: [["You will need", "A real assessment brief or work task (staff: one of your own; students: one you have been set, or a past example), and an AI tool your university approves."],
+            ["Reference", "The four AI-use settings, in the table below and in the toolkit on the home page."]],
+    privacy: "Copy only the wording of the task. Leave out names, and never paste student work or marks.",
+    extra: "settings",
+    steps: [
+     { t: "Copy the wording of your task into a document, leaving out personal or confidential details." },
+     { t: "In a new chat, paste the task and type the prompt below. For a long task, ask for a plan and the opening paragraphs instead.", prompt: "Complete this task as a first draft." },
+     { t: "Read the result. Rate the task's AI exposure: could someone get a pass using this output with little or no thinking of their own? Choose low, medium or high." },
+     { t: "Check what the brief says about AI. Which of the four settings fits the task's learning purpose? Is that setting stated clearly?" },
+     { t: "Redesign.", subs: [
+        { aud: "staff", t: "Change the task, or its guidance, so that human thinking counts. Options: a short viva or conversation; local or personal context; process notes or annotated drafts; a critique of an AI output. Write the revised wording in three to five sentences, with an AI-use statement that names the setting." },
+        { aud: "student", t: "Write the question you would put to your tutor to clarify which setting applies, what you must declare, and how your own thinking will be assessed. Suggest one of the changes listed for staff." }] },
+     { t: "Optional: run the revised task through the AI again. Does it now need more from a human?" }],
+    tables: [{ cols: ["Item", "Your notes"], rows: ["The task, in one line", "What the task is meant to develop", ["AI exposure before, and why", ["Low", "Medium", "High"]], "Does the brief state an AI setting? Which?", ["The setting that best fits the purpose", ["1. Not permitted", "2. Minimal", "3. Permitted", "4. Integrated"]], "The change you chose", "Revised wording (staff) or your question to your tutor (students)", ["AI exposure after, and why", ["Low", "Medium", "High"]]] }] },
+   reflect: {
+    student: "Why is being open about your AI use better for your learning and your standing than hiding it, or using tools that claim to disguise AI-written text?",
+    staff: "How could you update your handbooks and assessment briefs so that each task states which AI setting applies, and why, in words your students will understand?" } },
+
+ { n: 5, title: "Good, Ethical and Safe AI Use", hook: "Anything you paste into a public AI tool has left your control. You cannot reliably get it back.",
+   summary: "A few simple guardrails, and a seven-step routine developed by researchers in higher education, let you get the benefits without putting people's information or your reputation at risk.",
+   ideas: [
+    ["Mind what you share", "No student records, marks, unpublished work, interview transcripts, health details or research data in public tools. UK data protection law applies. If in doubt, ask before you paste."],
+    ["Anonymise, or leave it out", "First ask whether you need to share it at all. Remove names, places, dates and combinations of details that point to one person, before you paste. Prefer an approved tool."],
+    ["Credit and over-trust", "Find and cite the real source behind ideas. Watch for automation bias: the tendency to trust a confident machine and check less over time."],
+    ["TRACE-AI and declaring", "Target, Request, Audit, Corroborate, Elaborate, Act, Inspect. A declaration says which tool, what for, how you checked, and what you contributed."]],
+   ex: {
+    title: "Anonymise and Declare", time: 30,
+    intro: "Practise removing identifying details from a text before using an AI tool on it, check what the tool returns, and write a short declaration of how you used AI. The steps follow TRACE-AI.",
+    needs: [["You will need", "An AI tool your university approves, and a word processor."],
+            ["Material", "Only the invented sample note below. For real work, follow your university's policy on which tools you may use and what you may share."]],
+    privacy: "Use only the invented sample note. Every name, place and number in it is made up.",
+    extra: "note",
+    steps: [
+     { t: "<b class='lead'>Target.</b> Read the sample note. List every detail that could identify a person or place: names, institutions, places, dates, numbers, contact details and job details. Several small details together can point to one person." },
+     { t: "<b class='lead'>Anonymise.</b> Rewrite the note with those details removed or replaced by general terms, for example \"a second-year student\" or \"a local council\". Ask yourself: could someone still work out who this is?" },
+     { t: "<b class='lead'>Request.</b> In a new chat, paste only your anonymised version and type:", prompt: "Identify the three main themes in this interview note, and suggest two follow-up questions." },
+     { t: "<b class='lead'>Audit and corroborate.</b> Compare the tool's themes with the original note. Did it add anything that is not there? Did it miss anything important?" },
+     { t: "<b class='lead'>Act.</b> Write a short AI use declaration, as though this note were part of a real project. Use the declaration builder below." }],
+    tables: [{ title: "Details you removed", cols: ["Original detail", "Replaced with", "Why it could identify someone"], rows: ["", "", "", "", "", "", ""], blankRows: true }],
+    tool: "declaration" },
+   reflect: {
+    student: "Why does taking personal responsibility for your final submission matter, even when AI helped with early drafting? How does an honest declaration build trust with your tutors?",
+    staff: "What data risks exist in your own department's workflows when AI tools are used, and what simple protocol could you put in place to protect student and institutional data?" } },
+
+ { n: 6, title: "Intentional Non-Use", hook: "What if the most advanced AI skill is choosing not to use it?",
+   summary: "The struggle you are tempted to remove is often where the learning happens. Using the tools well and sometimes leaving them alone are two halves of the same skill.",
+   ideas: [
+    ["Effort is part of learning", "Reading closely, wrestling with evidence and finding your own words are not obstacles on the way to the learning. They are the learning."],
+    ["Handing over the effort", "Cognitive offloading helps when the freed-up effort goes somewhere better. Early research links heavy, uncritical reliance on AI with weaker recall and less independent thinking."],
+    ["Two kinds of task", "Where the output matters, a tool may be sensible. Where the process matters, the thinking is the product. Handing it over is like paying someone to go to the gym for you."],
+    ["A choice, not a rule", "Ask: if this tool vanished tomorrow, would I still be able to do this? If not, and you need to, that is the signal to practise unaided."]],
+   ex: {
+    title: "Side by Side", time: 30,
+    intro: "Write a short piece entirely on your own, compare it with an AI version of the same piece, and decide where you want to keep thinking for yourself.",
+    needs: [["Ground rules for Piece A", "No search engines, no AI, and no spelling or grammar checkers. Spellcheck is switched off in the writing box below. Imperfect writing is fine."],
+            ["Your prompt", "Use your own, or this one: Why did I choose my field of study or work, and what responsibilities does that carry?"]],
+    privacy: "When you ask the AI, give it only the prompt. Do not paste in your own piece or any sensitive personal details.",
+    tool: "timer",
+    steps: [
+     { t: "Set the timer for 15 minutes. Write about 250 words in response to your prompt, completely unaided. Do not stop to look things up." },
+     { t: "Save your piece and do not edit it afterwards. This is Piece A. The timer locks it when time is up." },
+     { t: "Open your AI tool in a new chat. Type the same prompt, followed by the line below. Do not show it your own piece. Paste the result as Piece B.", prompt: "Why did I choose my field of study or work, and what responsibilities does that carry? Write about 250 words." },
+     { t: "Put the two pieces side by side and complete the table below." },
+     { t: "Optional: ask the AI to improve Piece A. Notice what it changes, what it loses, and what you would keep." }],
+    tables: [{ cols: ["Question", "Piece A (mine)", "Piece B (AI)"], rows: ["Does it contain experience specific to me?", "Does it say anything surprising or particular?", "Could someone else have written it?", ["How hard did I have to think? (1 = easy, 5 = very hard)", ["1", "2", "3", "4", "5"]], "Which would I be prouder to put my name to?"] }],
+    questions: ["Complete this sentence in your own words: I will do this thinking myself when...", "One area where I will deliberately practise without AI:"] },
+   reflect: {
+    student: "In which specific parts of your studies is unaided struggle necessary for your growth? How will you decide when to step away from AI so that your thinking keeps getting sharper?",
+    staff: "How could we design teaching and assessment that value unaided human thinking, and reassure students that their own imperfect voice matters more than polished AI text?" } },
+];
+
+const SETTINGS = [
+  { name: "Not permitted", what: "The task must show what you can do unaided.", eg: "Closed-book exam, live discussion." },
+  { name: "Minimal", what: "Spelling, grammar and formatting help only, with no generated content.", eg: "Using a proofreading aid." },
+  { name: "Permitted", what: "AI may help with ideas, structure or feedback. The analysis and writing are yours, and you declare what you used.", eg: "Planning an essay outline." },
+  { name: "Integrated", what: "The task asks you to use AI and to analyse what it does.", eg: "Comparing AI answers with the literature." }];
+
+const TRACE = [["T", "Target", "Decide what you are trying to do, and whether AI is appropriate."], ["R", "Request", "Ask clearly, with context."], ["A", "Audit", "Read the output critically, using the four-question audit."], ["C", "Corroborate", "Check important claims against reliable sources."], ["E", "Elaborate", "Do the real thinking yourself, in your own words."], ["A", "Act", "Make your own decision, and be open about how you used AI."], ["I", "Inspect", "Reflect on what you learned and what you are still unsure about."]];
+
+const GLOSSARY = [["Next-word prediction", "How generative AI writes: it repeatedly adds the most likely next word or word fragment.", 1], ["Hallucination", "A fluent, confident statement that is not true. The normal process working as designed, not a rare glitch.", 1], ["Automation bias", "Our tendency to trust a confident machine, and to check less and less over time.", 5], ["Cognitive offloading", "Passing mental work to an outside aid. Helpful when the freed-up effort is put to better use.", 6], ["AI-rich environment", "AI built into everyday tools, so the useful question is how and why it was used, not whether.", 4], ["AI detector", "Software that estimates whether text is machine-written. It gives probabilities, not proof.", 4]];
+
+const SAMPLE_NOTE = "Interview note, 14 March. Priya Sharma, a second-year geography student at Westfield University, told me she nearly left her course after her placement at Hartley Borough Council in January. She said her tutor, Dr James Okafor, had been supportive, but she was struggling with money and was working nights at the Tesco on Mill Road. Her student number is 2209871 and her email is p.sharma@westfield.example.ac.uk. She asked that her comments about her placement supervisor, Mark Dunning, stay confidential.";
+
+const SAMPLE_PASSAGE = "In today's fast-changing world, remote learning plays a pivotal role in higher education. Research shows that students who study online achieve 23% higher retention than those in traditional classrooms. A 2019 meta-analysis by the US Department of Education found that blended learning outperformed purely face-to-face instruction. Experts agree that flexibility is the single most important factor in student success. However, online study can also leave some learners feeling isolated from their peers. Ultimately, a balanced approach is needed to ensure that every student can thrive.";
+
+/* ---------------- state (per viewer, in this browser only) ---------------- */
+const KEY = "ai-literacy-hub:v1";
+let S = { aud: "student", done: {}, steps: {}, f: {}, hl: {}, tab: {} };
+try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch (e) {}
+let saveT;
+function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }, 200); }
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const words = s => (s.trim().match(/\S+/g) || []).length;
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove("show"), 1900); }
+async function copy(text, btn) {
+  try { await navigator.clipboard.writeText(text); toast("Copied"); }
+  catch (e) {
+    const ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select();
+    let ok = false; try { ok = document.execCommand("copy"); } catch (_) {}
+    ta.remove(); toast(ok ? "Copied" : "Select the text and copy it manually");
+  }
+}
+
+/* ---------------- transcripts ---------------- */
+function parseTranscript(md) {
+  const slides = []; let cur = null;
+  md.split(/\n/).forEach(line => {
+    const m = line.match(/^\[SLIDE (\d+): (.+?) – ([A-Z]+)\]/);
+    if (m) { cur = { n: +m[1], title: m[2], stage: m[3].toLowerCase(), paras: [] }; slides.push(cur); return; }
+    if (!cur || !line.trim() || /^\*\*[A-Z]+\*\*$/.test(line.trim()) || line.startsWith("# ")) return;
+    cur.paras.push(line.trim());
+  });
+  return slides;
+}
+const SLIDES = {}; for (const k in TRANSCRIPTS) SLIDES[k] = parseTranscript(TRANSCRIPTS[k]);
+const readMins = n => Math.max(1, Math.round(words(TRANSCRIPTS[n]) / 150));
+
+/* ---------------- status ---------------- */
+function status(n) {
+  if (S.done[n]) return "done";
+  const p = "m" + n + ":";
+  const any = Object.keys(S.steps).some(k => k.startsWith(p) && S.steps[k]) || Object.keys(S.f).some(k => k.startsWith(p) && S.f[k]);
+  return any ? "prog" : "new";
+}
+const chip = st => st === "done" ? '<span class="chip done">Complete</span>' : st === "prog" ? '<span class="chip prog">In progress</span>' : '<span class="chip">Not started</span>';
+function renderPips() {
+  const done = MODULES.filter(m => S.done[m.n]).length;
+  $("#pips").innerHTML = MODULES.map(m => { const s = status(m.n); return `<span class="p ${s === "done" ? "on" : s === "prog" ? "half" : ""}" title="Module ${m.n}"></span>`; }).join("") + `<span>${done}/6</span>`;
+}
+function setAud(a) {
+  S.aud = a; save();
+  $$(".seg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.aud === a));
+  route();
+}
+$$(".seg button").forEach(b => b.addEventListener("click", () => setAud(b.dataset.aud)));
+
+/* ---------------- home ---------------- */
+function home() {
+  const staff = S.aud === "staff";
+  const next = MODULES.find(m => !S.done[m.n]) || MODULES[0];
+  const started = MODULES.some(m => status(m.n) !== "new");
+  return `
+  <section class="hero"><div class="wrap">
+    <div>
+      <span class="eyebrow">Generative AI training · ${staff ? "for staff" : "for students"}</span>
+      <h1>Fluent is not <span class="hl">the same as true.</span></h1>
+      <p class="lede">${staff
+        ? "Six short films and practical exercises to help you understand generative AI, design tasks that value thinking, and model good use for your students."
+        : "Six short films and practical exercises to help you understand how AI tools work, check what they tell you, and decide when to use them and when not to."}</p>
+      <div class="cta">
+        <a class="btn primary" href="#module-${next.n}">${started ? "Continue with" : "Start"} Module ${next.n} <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+        <a class="btn ghost" href="#toolkit">Open the toolkit</a>
+      </div>
+      <div class="facts"><div><b>6</b>films</div><div><b>6</b>hands-on exercises</div><div><b>${MODULES.reduce((a, m) => a + m.ex.time, 0)} min</b>of practice, no technical background needed</div></div>
+    </div>
+    <div class="predict" aria-label="Next-word prediction demonstration">
+      <div class="bar-top"><span class="eyebrow">How AI writes, one word at a time</span></div>
+      <div class="phrase" id="pPhrase"></div>
+      <ul class="cands" id="pCands"></ul>
+      <div class="actions"><button class="btn primary small" id="pNext" type="button">Add the next word</button><button class="btn small" id="pReset" type="button">Start again</button></div>
+      <p class="note">Each step picks a likely next word and repeats. Nothing in this process checks whether you will actually see them later.</p>
+    </div>
+  </div></section>
+
+  <section class="section" id="modules"><div class="wrap">
+    <div class="section-head"><div><span class="eyebrow">The course</span><h2>Six modules, best taken in order</h2></div>
+      <p>Each module has a short film, its full transcript, and an exercise of 15 to 30 minutes that you complete on this page. Your notes stay in this browser.</p></div>
+    <div class="path">${MODULES.map(m => `
+      <a class="mcard" href="#module-${m.n}">
+        <div class="num"><b>${String(m.n).padStart(2, "0")}</b>${chip(status(m.n))}</div>
+        <h3>${esc(m.title)}</h3>
+        <p class="hook">${esc(m.hook)}</p>
+        <div class="foot"><span>Exercise: ${esc(m.ex.title)}</span><span>${m.ex.time} min</span></div>
+      </a>`).join("")}</div>
+  </div></section>
+
+  <section class="section" id="toolkit"><div class="wrap">
+    <div class="section-head"><div><span class="eyebrow">Toolkit</span><h2>Keep these to hand</h2></div>
+      <p>The routines and frameworks from the films, for quick reference when you use AI in real work.</p></div>
+    <div class="kit">
+      <div class="panel k-trace"><h3>TRACE-AI</h3><p class="muted">A seven-step routine that keeps you in charge. From Module 5.</p>
+        <ol class="trace">${TRACE.map(t => `<li><span class="L">${t[0]}</span><span class="w">${t[1]}</span><span class="d">${t[2]}</span></li>`).join("")}</ol></div>
+      <div class="panel k-dial dial"><h3>The AI-use dial</h3><p class="muted">Set task by task. Check your own institution's wording. From Module 4.</p>
+        <label class="sr" for="dial">AI-use setting</label>
+        <input type="range" id="dial" min="1" max="4" step="1" value="3">
+        <div class="ticks">${SETTINGS.map(s => `<span>${s.name}</span>`).join("")}</div>
+        <div class="out" id="dialOut"></div></div>
+      <div class="panel k-audit"><h3>The four-question audit</h3><p class="muted">Apply to any AI output, including your own drafts. From Module 3.</p>
+        <ol class="audit"><li>What exactly is being claimed?</li><li>What is the evidence for each claim?</li><li>What is the tone doing, and where is it vague or padded?</li><li>Whose perspective is shown, and whose is missing?</li></ol>
+        <p class="muted" style="margin-top:14px;font-size:.9rem">Then verify the claims that matter against reliable sources before you rely on them.</p></div>
+      <div class="panel k-gloss"><h3>Words you will hear</h3><p class="muted">Key terms from the series.</p>
+        <dl class="gloss">${GLOSSARY.map(g => `<div><dt>${g[0]}</dt><dd>${g[1]} <small><a href="#module-${g[2]}">Module ${g[2]}</a></small></dd></div>`).join("")}</dl></div>
+    </div>
+  </div></section>`;
+}
+
+const CHAIN = {
+  "See you": [["later", 41], ["soon", 27], ["tomorrow", 14], ["there", 9], ["Friday", 5]],
+  "later": [["!", 38], ["tonight", 21], [",", 17], ["then", 12], ["mate", 6]],
+  "soon": [["!", 44], [",", 22], ["I", 12], ["then", 10], ["hopefully", 6]],
+  "tomorrow": [["!", 36], ["at", 26], ["morning", 15], [",", 12], ["then", 7]],
+  "there": [["!", 40], ["at", 24], [",", 15], ["then", 11], ["soon", 6]],
+  "Friday": [["!", 35], ["at", 30], ["night", 16], [",", 11], ["then", 5]],
+};
+let pWords = ["See", "you"], pLast = null;
+function pDist() { const key = pWords.length === 2 ? "See you" : pWords[pWords.length - 1]; return CHAIN[key] || null; }
+function pRender() {
+  const ph = $("#pPhrase"); if (!ph) return;
+  ph.innerHTML = pWords.map((w, i) => { const t = esc(w); const sp = /^[!,]$/.test(w) ? "" : (i ? " " : ""); return sp + (i === pWords.length - 1 && pLast ? `<span class="new">${t}</span>` : t); }).join("") + '<span class="caret"></span>';
+  const d = pDist();
+  $("#pCands").innerHTML = d ? d.map(([w, p]) => `<li><span>${esc(w)}</span><span class="track"><span class="fill" style="width:${p * 2}%"></span></span><span class="pct">${p}%</span></li>`).join("")
+    : `<li style="grid-template-columns:1fr"><span class="muted" style="font-family:var(--f-body)">A full, fluent sentence. Plausible, but no one checked it.</span></li>`;
+  $("#pNext").disabled = !d;
+}
+function pNext() {
+  const d = pDist(); if (!d) return;
+  let r = Math.random() * d.reduce((a, x) => a + x[1], 0), pick = d[0][0];
+  for (const [w, p] of d) { if ((r -= p) <= 0) { pick = w; break; } }
+  pWords.push(pick); pLast = pick;
+  pRender();
+}
+
+function wireHome() {
+  pWords = ["See", "you"]; pLast = null; pRender();
+  $("#pNext").addEventListener("click", pNext);
+  $("#pReset").addEventListener("click", () => { pWords = ["See", "you"]; pLast = null; pRender(); });
+  const dial = $("#dial"), out = $("#dialOut");
+  const show = () => { const s = SETTINGS[dial.value - 1]; out.innerHTML = `<span class="eyebrow">Setting ${dial.value}</span><h4>${s.name}</h4><p>${s.what}</p><p>Example: ${s.eg}</p>`; };
+  dial.addEventListener("input", show); show();
+}
+
+/* ---------------- module page ---------------- */
+function videoHTML(m) {
+  const v = VIDEOS[m.n] || {}, src = (v.src || "").trim();
+  if (!src) {
+    return `<div class="film"><div class="holder">
+      <div class="play"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div>
+      <h3>Film for Module ${m.n} coming soon</h3>
+      <p>Until it is ready, the full transcript covers everything the film says, slide by slide.</p>
+      <div class="slide-strip">${SLIDES[m.n].map(s => `<span>${s.n} · ${esc(s.title)}</span>`).join("")}</div>
+      <button class="btn small" type="button" data-goto="transcript">Read the transcript</button>
+    </div></div>`;
+  }
+  if (/\.(mp4|webm|m4v|ogv|mov)(\?|#|$)/i.test(src)) {
+    return `<div class="film"><video controls preload="metadata" playsinline ${v.poster ? `poster="${esc(v.poster)}"` : ""}>
+      <source src="${esc(src)}">${v.captions ? `<track kind="captions" srclang="en" label="English" src="${esc(v.captions)}" default>` : ""}
+      Your browser cannot play this film. Read the transcript instead.</video></div>`;
+  }
+  let emb = src, mm;
+  if ((mm = src.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/))) emb = `https://www.youtube-nocookie.com/embed/${mm[1]}?rel=0`;
+  else if ((mm = src.match(/vimeo\.com\/(?:video\/)?(\d+)/))) emb = `https://player.vimeo.com/video/${mm[1]}`;
+  return `<div class="film"><iframe src="${esc(emb)}" title="Module ${m.n} film: ${esc(m.title)}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen loading="lazy"></iframe></div>`;
+}
+
+function fieldKey(n, k) { return `m${n}:${k}`; }
+function ta(n, k, label, rows = 2, extra = "") {
+  const key = fieldKey(n, k);
+  return `<textarea class="f" id="f-${key.replace(/[^\w-]/g, "_")}" data-key="${key}" data-label="${esc(label)}" rows="${rows}" ${extra}>${esc(S.f[key] || "")}</textarea>`;
+}
+function sel(n, k, label, opts) {
+  const key = fieldKey(n, k), v = S.f[key] || "";
+  return `<select class="f" id="f-${key.replace(/[^\w-]/g, "_")}" data-key="${key}" data-label="${esc(label)}"><option value="">Choose…</option>${opts.map(o => `<option${o === v ? " selected" : ""}>${esc(o)}</option>`).join("")}</select>`;
+}
+
+function tableHTML(m, t, ti) {
+  const n = m.n;
+  const head = `<thead><tr>${t.cols.map(c => `<th scope="col">${esc(c)}</th>`).join("")}</tr></thead>`;
+  const body = t.rows.map((row, ri) => {
+    const label = Array.isArray(row) ? row[0] : row, opts = Array.isArray(row) ? row[1] : null;
+    const cells = [];
+    if (t.blankRows) {
+      for (let ci = 0; ci < t.cols.length; ci++) cells.push(`<td>${ta(n, `t${ti}r${ri}c${ci}`, `${t.title || "Table"} – row ${ri + 1} – ${t.cols[ci]}`, 1)}</td>`);
+      return `<tr>${cells.join("")}</tr>`;
+    }
+    for (let ci = 1; ci < t.cols.length; ci++) {
+      const lab = `${label} – ${t.cols[ci] || "notes"}`;
+      if (t.id === "audit" && ci === 2) cells.push(`<td>${sel(n, `t${ti}r${ri}c${ci}`, lab, opts)}</td>`);
+      else if (t.id === "counts" && ci === 1) cells.push(`<td>${ri === 3 ? `<input class="f" readonly id="f-m3-total" data-key="m3:total" data-label="Total sentences" value="">` : `<input class="f" type="number" min="0" inputmode="numeric" id="f-m${n}-t${ti}r${ri}" data-key="${fieldKey(n, `t${ti}r${ri}c${ci}`)}" data-label="${esc(lab)}" value="${esc(S.f[fieldKey(n, `t${ti}r${ri}c${ci}`)] || "")}">`}</td>`);
+      else if (opts && t.id !== "audit") cells.push(`<td style="display:grid;gap:6px">${sel(n, `t${ti}r${ri}c${ci}s`, lab, opts)}${t.cols.length === 2 ? ta(n, `t${ti}r${ri}c${ci}`, lab + " (why)", 1, 'placeholder="Why?"') : ""}</td>`);
+      else cells.push(`<td>${ta(n, `t${ti}r${ri}c${ci}`, lab, 1)}</td>`);
+    }
+    const sw = t.id === "counts" && ri < 3 ? `<span class="swatch ${"gar"[ri]}"><i>${"GAR"[ri]}</i>${label}</span>` : esc(label);
+    return `<tr><th scope="row">${sw}</th>${cells.join("")}</tr>`;
+  }).join("");
+  return `${t.title ? `<h4 style="font-size:1rem;margin:22px 0 10px">${esc(t.title)}</h4>` : ""}<div class="tbl-wrap"><table class="rec">${head}<tbody>${body}</tbody></table></div>`;
+}
+
+function extraHTML(m) {
+  const x = m.ex.extra;
+  if (x === "colours") return `<div class="ex-block"><h3>The three-colour code</h3>
+    <p class="muted" style="margin-bottom:12px">If colours are hard to tell apart, each mark also shows its letter: G, A or R.</p>
+    <div class="tbl-wrap"><table class="rec ref"><thead><tr><th>Colour</th><th>Meaning</th><th>Looks like</th></tr></thead><tbody>
+    <tr><th><span class="swatch g"><i>G</i>Green</span></th><td>A specific claim that you have checked, or can check easily, or clear reasoning that holds up</td><td>A named study, a precise figure with a source, a well-argued step</td></tr>
+    <tr><th><span class="swatch a"><i>A</i>Amber</span></th><td>Vague, padded or stock phrasing that adds little meaning</td><td>"plays a pivotal role", "in today's fast-changing world", "a balanced approach is needed"</td></tr>
+    <tr><th><span class="swatch r"><i>R</i>Red</span></th><td>A claim with no source, or one that might be invented, or that you must verify before relying on it</td><td>"Research shows...", a statistic with no origin, a quotation with no reference</td></tr>
+    </tbody></table></div></div>`;
+  if (x === "settings") return `<div class="ex-block"><h3>The four AI-use settings</h3>
+    <p class="muted" style="margin-bottom:12px">Universities often describe permitted AI use in four settings. The wording differs between institutions, so check your own policy.</p>
+    <div class="tbl-wrap"><table class="rec ref"><thead><tr><th>Setting</th><th>What it means</th><th>Example</th></tr></thead><tbody>
+    ${SETTINGS.map((s, i) => `<tr><th>${i + 1}. ${s.name}</th><td>${s.what}</td><td>${s.eg}</td></tr>`).join("")}</tbody></table></div></div>`;
+  if (x === "note") return `<div class="ex-block"><h3>The sample note</h3>
+    <div class="example"><span class="eyebrow">Invented sample. Every name, place and number is made up.</span>${esc(SAMPLE_NOTE)}</div>
+    <div class="row" style="margin-top:10px"><button class="btn small" type="button" data-copy-note>Copy the note</button></div>
+    <h4 style="font-size:1rem;margin:22px 0 10px">Your anonymised version</h4>
+    ${ta(m.n, "anon", "Anonymised note", 6, 'placeholder="Rewrite the note here with identifying details removed or generalised."')}
+    </div>`;
+  return "";
+}
+
+function toolHTML(m) {
+  const t = m.ex.tool, n = m.n;
+  if (t === "highlighter") return `<div class="ex-block tool" id="hlTool">
+    <div class="tool-head"><h3>Highlighter</h3><span class="tag">Interactive</span></div>
+    <p class="muted" style="margin-bottom:12px">Paste the AI passage, then click each sentence to cycle through green, amber, red and clear. The example below is a sample to practise on; replace it with your own.</p>
+    <div id="hlEdit"${S.hl.text ? " hidden" : ""}>
+      <textarea class="f" id="hlInput" rows="7" placeholder="Paste the AI passage here.">${esc(S.hl.text || SAMPLE_PASSAGE)}</textarea>
+      <div class="row" style="margin-top:10px"><button class="btn primary small" type="button" id="hlGo">Mark this passage</button><button class="btn small" type="button" id="hlSample">Use the sample passage</button></div>
+    </div>
+    <div id="hlView"${S.hl.text ? "" : " hidden"}>
+      <div class="hl-legend"><span class="swatch g"><i>G</i>Checked or checkable</span><span class="swatch a"><i>A</i>Vague or padded</span><span class="swatch r"><i>R</i>Unsourced or must verify</span></div>
+      <div class="hl-text" id="hlText"></div>
+      <div class="hl-counts" id="hlCounts"></div>
+    </div></div>`;
+  if (t === "declaration") {
+    const f = [["tool", "Tool used", "e.g. Microsoft Copilot"], ["for", "What I used it for", "e.g. suggest themes in an anonymised interview note"], ["check", "How I checked the output", "e.g. compared each theme with the original note and removed one it did not support"], ["mine", "What I contributed myself", "e.g. I wrote the final analysis myself"]];
+    return `<div class="ex-block tool"><div class="tool-head"><h3>AI use declaration builder</h3><span class="tag">Interactive</span></div>
+      <p class="muted" style="margin-bottom:12px">A declaration needs four things. Fill them in and the statement writes itself. If your university has a standard declaration form, use that for real work.</p>
+      <div class="decl-grid">${f.map(x => `<label for="f-m5_decl_${x[0]}">${x[1]}<input class="f" id="f-m5_decl_${x[0]}" data-key="m5:decl_${x[0]}" data-label="Declaration – ${x[1]}" placeholder="${esc(x[2])}" value="${esc(S.f["m5:decl_" + x[0]] || "")}"></label>`).join("")}</div>
+      <div class="decl-out" id="declOut"></div>
+      <div class="row" style="margin-top:10px"><button class="btn small" type="button" id="declCopy">Copy declaration</button></div></div>`;
+  }
+  if (t === "timer") return `<div class="ex-block tool"><div class="tool-head"><h3>Writing timer</h3><span class="tag">Interactive</span></div>
+      <div class="timer"><div class="clock" id="clock">15:00</div>
+        <div class="row"><button class="btn primary small" type="button" id="tStart">Start</button><button class="btn small" type="button" id="tReset">Reset</button></div>
+        <p class="muted" id="tMsg" style="flex:1 1 220px;font-size:.92rem">Write without stopping. No search, no AI, no spellcheck.</p></div>
+      <div class="sbs">
+        <label for="f-m6_pieceA">Piece A (mine) <span class="wc" id="wcA"></span>${ta(n, "pieceA", "Piece A (mine)", 12, 'spellcheck="false" autocorrect="off" autocapitalize="off" placeholder="Start writing when the timer starts."')}</label>
+        <label for="f-m6_pieceB">Piece B (AI) <span class="wc" id="wcB"></span>${ta(n, "pieceB", "Piece B (AI)", 12, 'placeholder="Paste the AI version here."')}</label>
+      </div><div class="row" style="margin-top:10px"><button class="btn small" type="button" id="unlockA" ${S.f["m6:lockA"] ? "" : "hidden"}>Unlock Piece A</button></div></div>`;
+  return "";
+}
+
+function exerciseHTML(m) {
+  const n = m.n, e = m.ex, aud = S.aud;
+  const stepsHTML = e.steps.map((s, i) => {
+    const k = `m${n}:s${i}`, on = !!S.steps[k];
+    const prompt = s.prompt ? `<div class="prompt"><code>${esc(s.prompt).replace(/\[[^\]]+\]/g, x => `<span class="ph">${x}</span>`)}</code><button class="btn small" type="button" data-copy="${esc(s.prompt)}">Copy</button></div>` : "";
+    const subs = (s.subs || []).slice().sort((a, b) => (b.aud === aud) - (a.aud === aud)).map(x => `<div class="sub ${x.aud === aud ? "" : "other"}"><span class="eyebrow">${x.aud === "staff" ? "Staff" : "Students"}</span>${esc(x.t)}</div>`).join("");
+    return `<li class="${on ? "checked" : ""}"><input type="checkbox" class="tick" id="step-${n}-${i}" data-step="${k}" ${on ? "checked" : ""} aria-label="Step ${i + 1} done"><div class="st-text"><p>${s.t.includes("<b") ? s.t : esc(s.t)}</p>${prompt}${subs}</div></li>`;
+  }).join("");
+  const toolFirst = e.tool && e.tool !== "declaration";
+  return `
+  <div class="ex-intro"><div><span class="eyebrow">Exercise · about ${e.time} minutes</span><h2>${esc(e.title)}</h2><p class="prose">${esc(e.intro)}</p></div>
+    <div class="row"><a class="btn small" href="resources/exercises/module-${n}-exercise.docx" download>Word version</a></div></div>
+  <div class="ex-block"><h3>Before you start</h3>
+    <ul class="needs">${e.needs.map(x => `<li><b>${esc(x[0])}</b>${esc(x[1])}</li>`).join("")}<li class="privacy" style="grid-column:1/-1"><b>Privacy</b>${esc(e.privacy)}</li></ul></div>
+  ${extraHTML(m)}
+  ${toolFirst ? toolHTML(m) : ""}
+  <div class="ex-block"><h3>The exercise <span class="eyebrow" id="stepCount"></span></h3><ol class="steps">${stepsHTML}</ol></div>
+  ${!toolFirst && e.tool ? toolHTML(m) : ""}
+  <div class="ex-block"><h3>Record what you found</h3>
+    ${n === 3 ? `<div class="row" style="margin-bottom:12px"><button class="btn small" type="button" id="fillCounts">Fill counts from the highlighter</button></div>` : ""}
+    ${e.tables.map((t, i) => tableHTML(m, t, i)).join("")}
+    ${e.score ? `<div class="score"><b id="scoreN">0</b><span>of 6 quotations and references fully correct</span></div>` : ""}
+    ${e.questions ? `<div class="qs" style="margin-top:22px">${e.questions.map((q, i) => `<label for="f-m${n}_q${i}">${esc(q)}${ta(n, "q" + i, q, 3)}</label>`).join("")}</div>` : ""}
+  </div>
+  <div class="row" style="margin-top:24px"><button class="btn primary small" type="button" data-goto="reflect">Next: reflect</button><button class="btn small" type="button" data-export>Copy all my notes</button><span id="clearWrap"><button class="btn small ghost" type="button" data-clear>Clear my notes</button></span></div>`;
+}
+
+function reflectHTML(m) {
+  const aud = S.aud, other = aud === "staff" ? "student" : "staff";
+  const key = fieldKey(m.n, "reflect_" + aud);
+  return `<div class="reflect-card">
+    <span class="eyebrow">Reflect · ${aud === "staff" ? "for staff" : "for students"} · 150 to 250 words</span>
+    <p class="q">${esc(m.reflect[aud])}</p>
+    <label class="sr" for="f-${key.replace(/[^\w-]/g, "_")}">Your reflection</label>
+    ${ta(m.n, "reflect_" + aud, "Reflection (" + aud + ")", 10, 'placeholder="Use your own words, with no AI help."')}
+    <div class="meter"><span class="track"><span class="zone"></span><span class="fill" id="rFill"></span></span><span id="rCount">0 words</span></div>
+    <details class="other"><summary>See the ${other === "staff" ? "staff" : "student"} prompt</summary><p>${esc(m.reflect[other])}</p></details>
+  </div>
+  <div class="row" style="margin-top:20px"><button class="btn small" type="button" data-export>Copy all my notes</button></div>`;
+}
+
+function overviewHTML(m) {
+  return `<div class="two"><div>
+      <blockquote class="quote">${esc(m.hook)}</blockquote>
+      <p class="prose" style="margin-top:18px">${esc(m.summary)}</p>
+      <h3 style="margin-top:28px;font-size:var(--step-1)">Key ideas</h3>
+      <ul class="ideas">${m.ideas.map((x, i) => `<li><b class="n">${i + 1}</b><div><h4>${esc(x[0])}</h4><p>${esc(x[1])}</p></div></li>`).join("")}</ul>
+    </div>
+    <aside class="side">
+      <div class="panel"><h4>Your path through this module</h4><ul><li>Watch the film, or read the transcript</li><li>Complete the exercise (${m.ex.time} min)</li><li>Write a short reflection</li><li>Mark the module complete</li></ul>
+        <div class="row" style="margin-top:14px"><button class="btn primary small" type="button" data-goto="exercise">Go to the exercise</button></div></div>
+      <div class="panel"><h4>Downloads</h4><ul><li><a href="resources/transcripts/module-${m.n}-transcript.md" download>Transcript (.md)</a></li><li><a href="resources/exercises/module-${m.n}-exercise.docx" download>Exercise sheet (.docx)</a></li></ul></div>
+    </aside></div>`;
+}
+
+function transcriptHTML(m) {
+  return `<div class="tr-tools"><label class="search" for="trq"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg><input id="trq" type="search" placeholder="Search the transcript"></label><span class="muted" id="trHits" style="font-size:.88rem">${SLIDES[m.n].length} slides · about ${readMins(m.n)} min read</span></div>
+  <div id="trBody">${SLIDES[m.n].map(s => `<section class="slide" data-slide="${s.n}"><div class="lab"><b>${String(s.n).padStart(2, "0")}</b>Slide<br><span class="stage ${s.stage}">${s.stage}</span></div><div class="body"><h3>${esc(s.title)}</h3>${s.paras.map(p => `<p data-raw="${esc(p)}">${esc(p)}</p>`).join("")}</div></section>`).join("")}</div>`;
+}
+
+const TABS = [["overview", "Overview"], ["transcript", "Transcript"], ["exercise", "Exercise"], ["reflect", "Reflect"]];
+function moduleView(m) {
+  const tab = S.tab[m.n] || "overview";
+  const prev = MODULES[m.n - 2], next = MODULES[m.n];
+  return `<div class="wrap">
+    <div class="mhead">
+      <div class="crumbs"><a href="#home">← All modules</a><span class="muted">/</span><span class="muted">Module ${m.n} of 6</span></div>
+      <div class="mhead-grid"><div><span class="eyebrow">Module ${m.n}</span><h1>${esc(m.title)}</h1></div>
+        <div class="meta"><span id="mStatus">${chip(status(m.n))}</span><span class="chip">${m.ex.time} min exercise</span></div></div>
+    </div>
+    ${videoHTML(m)}
+    <div class="tabs" role="tablist">${TABS.map(([id, label]) => `<button role="tab" type="button" id="tab-${id}" aria-controls="panel" aria-selected="${tab === id}" data-tab="${id}">${label}${id === "exercise" ? ` <span class="count" id="tabCount"></span>` : ""}</button>`).join("")}</div>
+    <div class="tabpanel" id="panel" role="tabpanel"></div>
+    <div class="mfoot">
+      <div class="complete-bar" id="completeBar"></div>
+      <div class="nav">${prev ? `<a class="btn" href="#module-${prev.n}">← Module ${prev.n}</a>` : ""}${next ? `<a class="btn" href="#module-${next.n}">Module ${next.n} →</a>` : `<a class="btn" href="#home">Back to all modules</a>`}</div>
+    </div>
+  </div>`;
+}
+
+let curM = null;
+function renderPanel(m, tab) {
+  stopTimer();
+  S.tab[m.n] = tab; save();
+  $$(".tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === tab));
+  const p = $("#panel");
+  p.setAttribute("aria-labelledby", "tab-" + tab);
+  p.innerHTML = tab === "overview" ? overviewHTML(m) : tab === "transcript" ? transcriptHTML(m) : tab === "exercise" ? exerciseHTML(m) : reflectHTML(m);
+  wirePanel(m, tab);
+}
+function updateStepCount(m) {
+  const total = m.ex.steps.length, done = m.ex.steps.filter((_, i) => S.steps[`m${m.n}:s${i}`]).length;
+  const t = $("#tabCount"); if (t) t.textContent = `${done}/${total}`;
+  const sc = $("#stepCount"); if (sc) sc.textContent = `${done} of ${total} steps done`;
+}
+function updateComplete(m) {
+  const done = !!S.done[m.n];
+  $("#completeBar").innerHTML = done
+    ? `<span class="chip done">Module complete</span><button class="btn small ghost" type="button" id="undoDone">Mark as not complete</button>`
+    : `<button class="btn primary" type="button" id="markDone">Mark module ${m.n} complete</button>`;
+  $("#mStatus").innerHTML = chip(status(m.n));
+  renderPips();
+  const b = $("#markDone"); if (b) b.onclick = () => { S.done[m.n] = true; save(); updateComplete(m); toast(m.n === 6 ? "Course complete. Well done." : `Module ${m.n} complete`); };
+  const u = $("#undoDone"); if (u) u.onclick = () => { delete S.done[m.n]; save(); updateComplete(m); };
+}
+
+function exportNotes(m) {
+  const lines = [`AI Literacy Hub – Module ${m.n}: ${m.title}`, `Exercise: ${m.ex.title}`, ""];
+  m.ex.steps.forEach((s, i) => lines.push(`[${S.steps[`m${m.n}:s${i}`] ? "x" : " "}] Step ${i + 1}: ${s.t.replace(/<[^>]+>/g, "")}`));
+  lines.push("");
+  const p = `m${m.n}:`;
+  const labels = {};
+  $$("[data-key]").forEach(el => labels[el.dataset.key] = el.dataset.label);
+  const nice = k => labels[k] || (k.includes("reflect_") ? `Reflection (${k.split("_").pop()})` : k.slice(p.length));
+  Object.keys(S.f).filter(k => k.startsWith(p) && S.f[k] && k !== "m6:lockA").forEach(k => lines.push(`${nice(k)}:\n${S.f[k]}\n`));
+  if (m.n === 3 && S.hl.text) { lines.push("Highlighted passage:"); hlSentences().forEach((s, i) => lines.push(`(${(S.hl.marks || {})[i] || "-"}) ${s.trim()}`)); lines.push(""); }
+  if (m.n === 5 && declText()) lines.push("Declaration:\n" + declText());
+  return lines.join("\n");
+}
+
+function hlSentences() { return (S.hl.text || "").match(/[^.!?]+[.!?]+["”’)]*\s*|[^.!?]+$/g) || []; }
+function hlRender() {
+  const box = $("#hlText"); if (!box) return;
+  const marks = S.hl.marks || {};
+  box.innerHTML = hlSentences().map((s, i) => `<span class="s" tabindex="0" role="button" data-i="${i}" ${marks[i] ? `data-c="${marks[i]}"` : ""}>${esc(s)}</span>`).join("");
+  const c = { G: 0, A: 0, R: 0 }; Object.values(marks).forEach(v => c[v] != null && c[v]++);
+  const total = hlSentences().length;
+  $("#hlCounts").innerHTML = `<span class="c g">G ${c.G}</span><span class="c a">A ${c.A}</span><span class="c r">R ${c.R}</span><span class="c">${total - c.G - c.A - c.R} unmarked</span><button class="btn small ghost" type="button" id="hlEditBtn">Edit or replace the passage</button>`;
+  $("#hlEditBtn").onclick = () => { $("#hlEdit").hidden = false; $("#hlView").hidden = true; $("#hlInput").value = S.hl.text; $("#hlInput").focus(); };
+}
+function declText() {
+  const g = k => (S.f["m5:decl_" + k] || "").trim().replace(/[.\s]+$/, "");
+  const tool = g("tool"), fr = g("for"), ch = g("check"), mine = g("mine");
+  if (!tool && !fr && !ch && !mine) return "";
+  const cap = s => s ? s[0].toUpperCase() + s.slice(1) : s;
+  const parts = [];
+  parts.push(`I used ${tool || "[tool]"}${fr ? " to " + fr.replace(/^to\s+/i, "") : ""}.`);
+  if (ch) parts.push(/^i\s/i.test(ch) ? cap(ch) + "." : "To check the output, I " + ch.replace(/^i\s+/i, "") + ".");
+  if (mine) parts.push(cap(mine) + ".");
+  return parts.join(" ");
+}
+
+function wirePanel(m, tab) {
+  const p = $("#panel");
+  $$("[data-goto]", p).forEach(b => b.addEventListener("click", () => { renderPanel(m, b.dataset.goto); $(".tabs").scrollIntoView({ block: "start" }); }));
+  $$("[data-copy]", p).forEach(b => b.addEventListener("click", () => copy(b.dataset.copy)));
+  $$("[data-export]", p).forEach(b => b.addEventListener("click", () => copy(exportNotes(m))));
+  $$("[data-key]", p).forEach(el => {
+    const ev = el.tagName === "SELECT" ? "change" : "input";
+    el.addEventListener(ev, () => { S.f[el.dataset.key] = el.value; save(); onField(m, el); });
+    if (el.tagName === "TEXTAREA") autosize(el);
+  });
+  $$("[data-step]", p).forEach(cb => cb.addEventListener("change", () => {
+    S.steps[cb.dataset.step] = cb.checked; save(); cb.closest("li").classList.toggle("checked", cb.checked); updateStepCount(m); updateComplete(m);
+  }));
+  const cw = $("#clearWrap");
+  if (cw) cw.addEventListener("click", e => {
+    if (e.target.matches("[data-clear]")) cw.innerHTML = `<span class="confirm">Clear every note for this module? <button class="btn small" type="button" data-yes>Clear</button><button class="btn small ghost" type="button" data-no>Keep</button></span>`;
+    else if (e.target.matches("[data-no]")) cw.innerHTML = `<button class="btn small ghost" type="button" data-clear>Clear my notes</button>`;
+    else if (e.target.matches("[data-yes]")) {
+      const pre = `m${m.n}:`; Object.keys(S.f).forEach(k => k.startsWith(pre) && delete S.f[k]); Object.keys(S.steps).forEach(k => k.startsWith(pre) && delete S.steps[k]);
+      if (m.n === 3) S.hl = {}; save(); renderPanel(m, "exercise"); updateComplete(m); updateStepCount(m); toast("Notes cleared");
+    }
+  });
+  if (tab === "transcript") {
+    const q = $("#trq"), hits = $("#trHits");
+    q.addEventListener("input", () => {
+      const term = q.value.trim(), re = term ? new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi") : null; let n = 0;
+      $$("#trBody .slide").forEach(sec => {
+        let found = false;
+        $$("p[data-raw]", sec).forEach(pp => { const raw = esc(pp.dataset.raw); if (re && re.test(pp.dataset.raw)) { found = true; re.lastIndex = 0; pp.innerHTML = raw.replace(new RegExp(esc(term).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), x => (n++, `<mark>${x}</mark>`)); } else pp.innerHTML = raw; if (re) re.lastIndex = 0; });
+        sec.classList.toggle("dim", !!re && !found);
+      });
+      hits.textContent = re ? `${n} match${n === 1 ? "" : "es"}` : `${SLIDES[m.n].length} slides · about ${readMins(m.n)} min read`;
+    });
+  }
+  if (tab === "exercise") {
+    updateStepCount(m);
+    if (m.ex.score) updateScore(m);
+    if (m.n === 3) wireHighlighter(m);
+    if (m.n === 5) { $("[data-copy-note]").addEventListener("click", () => copy(SAMPLE_NOTE)); updateDecl(); $("#declCopy").addEventListener("click", () => { const t = declText(); t ? copy(t) : toast("Fill in the four parts first"); }); }
+    if (m.n === 6) wireTimer();
+    if (m.n === 3) updateTotal();
+  }
+  if (tab === "reflect") updateMeter(m);
+}
+function autosize(el) { const f = () => { el.style.height = "auto"; el.style.height = Math.min(el.scrollHeight + 2, 640) + "px"; }; el.addEventListener("input", f); requestAnimationFrame(f); }
+function onField(m, el) {
+  if (m.ex.score) updateScore(m);
+  if (m.n === 5 && el.dataset.key.startsWith("m5:decl_")) updateDecl();
+  if (m.n === 3) updateTotal();
+  if (el.dataset.key.includes("reflect_")) updateMeter(m);
+  if (m.n === 6) updateWC();
+  $("#mStatus").innerHTML = chip(status(m.n)); renderPips();
+}
+function updateScore(m) {
+  const good = ["Verbatim", "Real and correct"]; let n = 0;
+  for (let r = 1; r <= 6; r++) if (good.includes(S.f[`m2:t0r${r}c2`])) n++;
+  const el = $("#scoreN"); if (el) el.textContent = n;
+}
+function updateDecl() { const o = $("#declOut"); if (!o) return; const t = declText(); o.classList.toggle("empty", !t); o.textContent = t || "Example: I used Microsoft Copilot to suggest themes in an anonymised interview note. I compared each theme with the original note and removed one that it did not support. I wrote the final analysis myself."; }
+function updateTotal() { const el = $("#f-m3-total"); if (!el) return; let t = 0, any = false; for (let r = 0; r < 3; r++) { const v = parseInt(S.f[`m3:t0r${r}c1`], 10); if (!isNaN(v)) { t += v; any = true; } } el.value = any ? t : ""; }
+function updateMeter(m) {
+  const v = S.f[fieldKey(m.n, "reflect_" + S.aud)] || "", w = words(v);
+  const f = $("#rFill"); if (!f) return;
+  f.style.width = Math.min(100, w / 300 * 100) + "%";
+  $("#rCount").textContent = `${w} word${w === 1 ? "" : "s"}${w >= 150 && w <= 250 ? " · on target" : w > 250 ? " · over the suggested length" : ""}`;
+}
+function wireHighlighter(m) {
+  const go = () => { const v = $("#hlInput").value.trim(); if (!v) { toast("Paste a passage first"); return; } if (v !== S.hl.text) S.hl = { text: v, marks: {} }; save(); $("#hlEdit").hidden = true; $("#hlView").hidden = false; hlRender(); onField(m, { dataset: { key: "" } }); };
+  $("#hlGo").addEventListener("click", go);
+  $("#hlSample").addEventListener("click", () => { $("#hlInput").value = SAMPLE_PASSAGE; });
+  if (!S.hl.text) { /* show the sample marked-up view by default so the tool is visible in use */ }
+  const box = $("#hlText");
+  const cycle = i => { S.hl.marks = S.hl.marks || {}; const order = ["", "G", "A", "R"]; const cur = S.hl.marks[i] || ""; const nx = order[(order.indexOf(cur) + 1) % 4]; if (nx) S.hl.marks[i] = nx; else delete S.hl.marks[i]; save(); hlRender(); const el = $(`#hlText .s[data-i="${i}"]`); if (el) el.focus(); };
+  box.addEventListener("click", e => { const s = e.target.closest(".s"); if (s) cycle(+s.dataset.i); });
+  box.addEventListener("keydown", e => { const s = e.target.closest(".s"); if (!s) return; const k = e.key.toUpperCase();
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); cycle(+s.dataset.i); }
+    else if ("GAR".includes(k) && k.length === 1) { S.hl.marks = S.hl.marks || {}; S.hl.marks[s.dataset.i] = k; save(); hlRender(); $(`#hlText .s[data-i="${s.dataset.i}"]`).focus(); }
+    else if (e.key === "Backspace" || e.key === "Delete") { delete (S.hl.marks || {})[s.dataset.i]; save(); hlRender(); $(`#hlText .s[data-i="${s.dataset.i}"]`).focus(); } });
+  if (S.hl.text) hlRender();
+  $("#fillCounts").addEventListener("click", () => {
+    if (!S.hl.text) { toast("Mark a passage in the highlighter first"); return; }
+    const sents = hlSentences(), marks = S.hl.marks || {};
+    ["G", "A", "R"].forEach((c, r) => {
+      const idx = Object.keys(marks).filter(i => marks[i] === c);
+      S.f[`m3:t0r${r}c1`] = String(idx.length);
+      if (idx.length && !S.f[`m3:t0r${r}c2`]) S.f[`m3:t0r${r}c2`] = sents[idx[0]].trim();
+    });
+    save(); renderPanel(m, "exercise"); toast("Counts filled in");
+  });
+}
+let tState = { left: 900, run: false, id: null };
+function stopTimer() { clearInterval(tState.id); tState.run = false; }
+function wireTimer() {
+  const clock = $("#clock"), start = $("#tStart"), a = $("#f-m6_pieceA");
+  const fmt = s => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+  const lock = on => { a.readOnly = on; S.f["m6:lockA"] = on ? "1" : ""; save(); $("#unlockA").hidden = !on; };
+  if (S.f["m6:lockA"]) a.readOnly = true;
+  const paint = () => { clock.textContent = fmt(tState.left); clock.classList.toggle("over", tState.left === 0); start.textContent = tState.run ? "Pause" : tState.left < 900 && tState.left > 0 ? "Resume" : "Start"; };
+  paint(); updateWC();
+  start.onclick = () => {
+    if (tState.left === 0) return;
+    tState.run = !tState.run;
+    if (tState.run) { a.focus(); tState.id = setInterval(() => { tState.left--; if (!$("#clock")) { clearInterval(tState.id); return; } if (tState.left <= 0) { tState.left = 0; tState.run = false; clearInterval(tState.id); lock(true); $("#tMsg").textContent = "Time is up. Piece A is saved and locked. Do not edit it."; toast("Time is up"); } paint(); }, 1000); }
+    else clearInterval(tState.id);
+    paint();
+  };
+  $("#tReset").onclick = () => { clearInterval(tState.id); tState = { left: 900, run: false, id: null }; $("#tMsg").textContent = "Write without stopping. No search, no AI, no spellcheck."; paint(); };
+  $("#unlockA").onclick = () => lock(false);
+}
+function updateWC() { const a = $("#wcA"), b = $("#wcB"); if (a) a.textContent = words(S.f["m6:pieceA"] || "") + " words"; if (b) b.textContent = words(S.f["m6:pieceB"] || "") + " words"; }
+
+/* ---------------- router ---------------- */
+function route() {
+  const h = location.hash.replace("#", "");
+  const mm = h.match(/^module-(\d)$/);
+  const app = $("#app");
+  stopTimer();
+  $$(".seg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.aud === S.aud));
+  renderPips();
+  if (mm && MODULES[mm[1] - 1]) {
+    const m = MODULES[mm[1] - 1];
+    const same = curM === m.n;
+    curM = m.n;
+    app.innerHTML = moduleView(m);
+    $$(".tabs button").forEach(b => b.addEventListener("click", () => renderPanel(m, b.dataset.tab)));
+    $(".film [data-goto]")?.addEventListener("click", () => { renderPanel(m, "transcript"); $(".tabs").scrollIntoView({ block: "start" }); });
+    renderPanel(m, S.tab[m.n] || "overview");
+    updateStepCount(m); updateComplete(m);
+    document.title = `Module ${m.n}: ${m.title} · AI Literacy Hub`;
+    if (!same) window.scrollTo(0, 0);
+  } else {
+    curM = null;
+    app.innerHTML = home() + `<footer class="site"><div class="wrap"><span>AI Literacy Hub · Generative AI training for staff and students</span><span>Your progress and notes are saved in this browser only.</span></div></footer>`;
+    wireHome();
+    document.title = "AI Literacy Hub";
+    if (h === "toolkit" || h === "modules") $("#" + h)?.scrollIntoView();
+    else window.scrollTo(0, 0);
+  }
+}
+window.addEventListener("hashchange", route);
+route();
+</script>
+
+</body>
+</html>
