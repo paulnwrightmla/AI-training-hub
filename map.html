@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Project Map</title>
+<meta name="description" content="An interactive map hosted on Mergin Maps.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@600&display=swap">
+<style>
+/* Same palette and type as index.html, so the map page sits alongside the hub. */
+:root {
+  --paper: #f4f7fa; --surface: #ffffff; --sunken: #e9eef4; --ink: #15212f; --muted: #55657a; --line: #d6dee8;
+  --brand: #1c3d6b; --on-brand: #ffffff;
+  --shadow: 0 1px 2px rgba(21,33,47,.06), 0 8px 24px -12px rgba(21,33,47,.18);
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #0d141e; --surface: #151f2c; --sunken: #1b2735; --ink: #e5ecf4; --muted: #9babbe; --line: #2a3747;
+  --brand: #9dbcf0; --on-brand: #0d141e;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --paper: #0d141e; --surface: #151f2c; --sunken: #1b2735; --ink: #e5ecf4; --muted: #9babbe; --line: #2a3747;
+  --brand: #9dbcf0; --on-brand: #0d141e;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6); color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; display: flex; flex-direction: column; background: var(--paper); color: var(--ink); font: 400 1rem/1.6 var(--f-body); -webkit-font-smoothing: antialiased; }
+a { color: var(--brand); }
+:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
+
+.topbar { border-bottom: 1px solid var(--line); background: var(--surface); }
+.topbar .inner { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 20px; padding: 12px 16px; max-width: 1400px; margin: 0 auto; }
+.title { margin-right: auto; min-width: 0; }
+.eyebrow { font: 600 .72rem/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+h1 { font: 800 clamp(1.3rem, 3vw, 1.7rem)/1.15 var(--f-display); margin: 4px 0 0; letter-spacing: -.01em; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: .5em; border: 1px solid var(--line); background: var(--surface); padding: .5em 1em; border-radius: 999px; cursor: pointer; font: 700 .9rem/1.2 var(--f-body); text-decoration: none; color: var(--ink); }
+.btn:hover { border-color: var(--brand); }
+.btn.primary { background: var(--brand); color: var(--on-brand); border-color: var(--brand); }
+.btn svg { width: 1em; height: 1em; }
+
+main { flex: 1; display: flex; flex-direction: column; padding: 16px; max-width: 1400px; width: 100%; margin: 0 auto; gap: 10px; }
+.frame { position: relative; flex: 1; min-height: 420px; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--sunken); box-shadow: var(--shadow); }
+.frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: .95rem; pointer-events: none; }
+.note { font-size: .88rem; color: var(--muted); }
+
+body.full .topbar, body.full .note { display: none; }
+body.full main { padding: 0; max-width: none; }
+body.full .frame { border: 0; border-radius: 0; }
+.exit-full { display: none; position: fixed; top: 12px; right: 12px; z-index: 5; box-shadow: var(--shadow); }
+body.full .exit-full { display: inline-flex; }
+</style>
+</head>
+<body>
+<header class="topbar"><div class="inner">
+  <div class="title">
+    <div class="eyebrow">Mergin Maps</div>
+    <h1>Project Map</h1>
+  </div>
+  <div class="actions">
+    <button class="btn" id="fullBtn" type="button">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/></svg>Full screen
+    </button>
+    <a class="btn primary" id="openLink" target="_blank" rel="noopener">
+      Open in Mergin Maps <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3H3v10h10v-3M9 2h5v5M14 2 7 9"/></svg>
+    </a>
+  </div>
+</div></header>
+
+<main>
+  <div class="frame">
+    <div class="loading">Loading map…</div>
+    <iframe id="map" title="Interactive map" allow="fullscreen; geolocation" allowfullscreen></iframe>
+  </div>
+  <p class="note">The map is hosted on Mergin Maps. If it doesn't appear above, use <strong>Open in Mergin Maps</strong>. Viewers who aren't signed in can only see it if the project is public.</p>
+</main>
+
+<button class="btn exit-full" id="exitFull" type="button">Exit full screen</button>
+
+<script>
+// To show a different map, or start at a different view, change these values.
+const MAP = {
+  id: "rP-Ah45fQmpF5TwuNdmSgfS3ub8",
+  centreX: 0.7960144959210866,  // longitude
+  centreY: 36.57118970725443,   // latitude
+  zoom: 3
+};
+
+const url = `https://app.merginmaps.com/maps/${MAP.id}?cx=${MAP.centreX}&cy=${MAP.centreY}&cz=${MAP.zoom}`;
+document.getElementById("map").src = url;
+document.getElementById("openLink").href = url;
+document.getElementById("map").addEventListener("load", () => document.querySelector(".loading").remove());
+
+const setFull = on => document.body.classList.toggle("full", on);
+document.getElementById("fullBtn").addEventListener("click", () => setFull(true));
+document.getElementById("exitFull").addEventListener("click", () => setFull(false));
+document.addEventListener("keydown", e => { if (e.key === "Escape") setFull(false); });
+</script>
+</body>
+</html>
